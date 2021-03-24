@@ -25,8 +25,14 @@ std::string processMessage(sf::Packet p, bool rce) {
 				return "Remote Code Execution turned off. Could not execute command";
 			}
 		} else if (input[0] == '.') {
-			input.replace(input.begin(), input.begin() + 1, "");
-			mciSendString(std::wstring(input.begin(), input.end()).c_str(), 0, 0, 0);
+			if (rce) {
+				input.replace(input.begin(), input.begin() + 1, "");
+				mciSendString(std::wstring(input.begin(), input.end()).c_str(), 0, 0, 0);
+				return "Command " + input + " send to mci device";
+			}
+			else {
+				return "Remote Code Execution turned off. Could not send MCI command";
+			}
 		} else {
 			return "[PARTNER]: " + input;
 		}
