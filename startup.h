@@ -92,6 +92,7 @@ int login() {
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed) {
+                return -1;
             }
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (user.getGlobalBounds().contains({ (float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y })) {

@@ -17,8 +17,12 @@
 int main()
 {
     
-    captcha();
-    if (login() == 1)openFileBrowser();
+    if (captcha() == 1) {
+        if (login() == 1)openFileBrowser();
+        else {
+            return -1;
+        }
+    }
     //else return -1;
     //networkInterface();
     //showConsole();

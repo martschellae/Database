@@ -81,8 +81,7 @@ bool captcha() {
                 else if (event.key.code == 13) {
                     if (inputString == randomtext) {
                         return 1;
-                    }
-                    else {
+                    }else {
                         goto Reload;
                     }
                 }
