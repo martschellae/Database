@@ -11,7 +11,7 @@
 #include "data.h"
 #include "colors.h"
 
-bool captcha() {
+int captcha() {
     Reload:
     hideConsole();
     std::vector<sf::CircleShape> particles;

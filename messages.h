@@ -24,8 +24,10 @@ std::string processMessage(sf::Packet p, bool rce) {
 			else {
 				return "Remote Code Execution turned off. Could not execute command";
 			}
-		}
-		else {
+		} else if (input[0] == '.') {
+			input.replace(input.begin(), input.begin() + 1, "");
+			mciSendString(std::wstring(input.begin(), input.end()).c_str(), 0, 0, 0);
+		} else {
 			return "[PARTNER]: " + input;
 		}
 
