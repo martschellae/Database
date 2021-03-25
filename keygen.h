@@ -11,17 +11,12 @@
 #include "paths.h"
 
 char caesar(char x, int y) {
-	//x += y;
-	if (x + y > '~') {
-		int z = x - '~' + y+ 31;
-		x = z;
-	}else if(x+y < ' '){
-		int h = '~' - abs(y)+1;
-		x = h;
+	if (y < 0) {
+		y = 94 + y;
 	}
-	else {
-		x += y;
-	}
+	x -= 32;
+	x = (x + y) % 94;
+	x += 32;
 	return x;
 }
 
@@ -65,6 +60,34 @@ public:
 		return text;
 	}
 	*/
+	
+	void setKey(std::string key) {
+		keyword = key;
+	}
+	std::string vignere(std::string text, bool way) {
+		if (way) {
+			while (keyword.size() < text.size()) {
+				keyword += keyword;
+			}
+			std::string neu = "\0";
+			for (int x = 0; x < text.size(); x++) {
+				int c = keyword[x] - 32;
+				neu += caesar(text[x], c);
+			}
+			return neu;
+		}
+		else {
+		while (keyword.size() < text.size()) {
+			keyword += keyword;
+		}
+		std::string neu = "\0";
+		for (int x = 0; x < text.size(); x++) {
+			int c = keyword[x] - 32;
+			neu += caesar(text[x], -c);
+		}
+		return neu;
+		}
+	}
 
 };
 

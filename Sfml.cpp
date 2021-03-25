@@ -16,33 +16,12 @@
 
 int main()
 {
-    /*
     if (captcha() == 1) {
         if (login() == 1)openFileBrowser();
         else {
             return -1;
         }
     }
-    */
-    //else return -1;
-    //networkInterface();
-    //showConsole();
-    dictionary d;
-
-    std::string entschl = "hilfe_wAruM_GEHT_eS";
-    //std::string verschl = d.encrypt("abcd", entschl);
-    //std::cout << verschl << "\n";
-    //std::cout << d.decrypt("abcd", verschl);
-    
-    /*
-    std::string str = "WZLQMOPGSVPDMQRXLFPIXZBZXFPCZESXYDLPWTTEDVYDQJEMQMOPLRVBFOZHTPCZIOKQQMLTHPISYXMWCFYNGIPHTMFDMTEFYMQPVYXPETXUQHDSYZKSPNQPFCBMXUPQQRJRTGFFTMEIOFHPDVMLQGIPHGREPCZQBWUXWHCIEWFEYGISFHSMODFMREVUYOPYHFIFCXMWULYSPJNBQFSZNZMDSNYIICMOLBQZQR";
-    
-    for (int z = 0; z < str.size(); z++) {
-        for (int p = 0; p < 6; p++) {
-
-        }
-    }
-*/
     return 0;
 }
 /*    
