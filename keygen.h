@@ -27,73 +27,40 @@ std::string caesar(std::string x, int y) {
 	return x;
 }
 
-
-class dictionary {
-private:
-	std::string keyword;
-public:
-	/*
-	std::string encrypt(std::string key, std::string text) {
-		std::string keywordOriginal = key;
-		keyword = "\0";
-		while (keyword.size() < text.size()) {
-			keyword += keywordOriginal;
-		}
-		std::cout << "\nkeyword: " << keyword << "\n";
-
-		for (int x = 0; x < text.size(); x++) {
-			text[x] = ((text[x] + keyword[x]) % 93) + 32;
-		}
-		return text;
-	}
-	std::string decrypt(std::string key, std::string text) {
-		std::string keywordOriginal = key;
-		keyword = "\0";
-		while (keyword.size() < text.size()) {
-			keyword += keywordOriginal;
-		}
-		std::cout << "\nkeyword: " << keyword << "\n";
-
-		for (int x = 0; x < text.size(); x++) {
-			text[x] = ((text[x] - keyword[x] + 93) % 93)+32;
-		}
-		return text;
-	}
-	*/
-	
-	void setKey(std::string key) {
-		keyword = key;
-	}
-	std::string vignere(std::string text, bool way) {
-		if (way) {
-			while (keyword.size() < text.size()) {
-				keyword += keyword;
-			}
-			std::string neu = "\0";
-			for (int x = 0; x < text.size(); x++) {
-				int c = keyword[x] - 32;
-				neu += caesar(text[x], c);
-			}
-			return neu;
-		}
-		else {
+std::string vignere(std::string text, bool way, std::string key) {
+	std::string keyword = key;
+	if (way) {
 		while (keyword.size() < text.size()) {
 			keyword += keyword;
 		}
 		std::string neu = "\0";
 		for (int x = 0; x < text.size(); x++) {
 			int c = keyword[x] - 32;
-			neu += caesar(text[x], -c);
+			neu += caesar(text[x], c);
 		}
 		return neu;
-		}
 	}
+	else {
+	while (keyword.size() < text.size()) {
+		keyword += keyword;
+	}
+	std::string neu = "\0";
+	for (int x = 0; x < text.size(); x++) {
+		int c = keyword[x] - 32;
+		neu += caesar(text[x], -c);
+	}
+	return neu;
+	}
+}
 
-};
+std::string createRandomKey(unsigned int seed, unsigned int length = 128) {
+	srand(seed * length);
+	std::string key = "\0";
 
-class key {
-protected:
-
-public:
-
-};
+	while (key.size() < length) {
+		int c = rand();
+		char u = (rand() % 94) + 32;
+		key += u;
+	}
+	return key;
+}

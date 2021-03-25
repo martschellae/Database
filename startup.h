@@ -71,7 +71,6 @@ int login() {
     pass.setFillColor(background);
     pass.setStyle(sf::Text::Italic);
 
-
     bool userTarget = true;
     bool passTarget = false;
 
