@@ -12,7 +12,7 @@
 #include "colors.h"
 
 std::string processMessage(sf::Packet p, bool rce) {
-	std::string input;
+	std::string input = "\0";
 	p >> input;
 	if (input.size() >= 1) {
 		if (input[0] == '/') {

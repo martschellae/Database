@@ -16,24 +16,24 @@
 
 int main()
 {
-    
+    /*
     if (captcha() == 1) {
         if (login() == 1)openFileBrowser();
         else {
             return -1;
         }
     }
+    */
     //else return -1;
     //networkInterface();
     //showConsole();
-    /*dictionary d;
-    std::cout << caesar("Dies ist eine sehr geheime Nachricht123456789", 9) << "\n";
-    std::cout << caesar(caesar("Dies ist eine sehr geheime Nachricht123456789 ", 9), -9) << "\n";
-    std::cout << caesar(" ", -5) << "\n";
+    dictionary d;
 
-    std::cout << d.encrypt("huthuthuthuthuthut", "text12345") << "\n";
-    std::cout << d.decrypt("huthuthuthuthuthut", d.encrypt("huthuthuthuthut", "text12345"));
-    */
+    std::string entschl = "hilfe_wAruM_GEHT_eS";
+    //std::string verschl = d.encrypt("abcd", entschl);
+    //std::cout << verschl << "\n";
+    //std::cout << d.decrypt("abcd", verschl);
+    
     /*
     std::string str = "WZLQMOPGSVPDMQRXLFPIXZBZXFPCZESXYDLPWTTEDVYDQJEMQMOPLRVBFOZHTPCZIOKQQMLTHPISYXMWCFYNGIPHTMFDMTEFYMQPVYXPETXUQHDSYZKSPNQPFCBMXUPQQRJRTGFFTMEIOFHPDVMLQGIPHGREPCZQBWUXWHCIEWFEYGISFHSMODFMREVUYOPYHFIFCXMWULYSPJNBQFSZNZMDSNYIICMOLBQZQR";
     
