@@ -39,7 +39,7 @@ public:
     }
 };
 
-void openFileBrowser(){
+void openFileBrowser(std::string password){
 
     hideConsole();
     std::string UserID;
@@ -52,10 +52,11 @@ void openFileBrowser(){
     std::getline(input, PassID);
 
     Database datab;
+    datab.setPassword(password);
     datab.openDataBase();
     datab.sortDatabase();
     datab.updateDataBase();
-    Reload:
+    
     std::vector<sf::CircleShape> particles;
     std::vector<sf::Vector2f> particlePos;
     int particleCount = 2300;
@@ -93,7 +94,7 @@ void openFileBrowser(){
     sf::RenderWindow window(sf::VideoMode(1300, 700), "File Browser");
     
     fEvent.registerEvent("Opened Window[1300:700]");
-
+    Reload:
     sf::Text user("UserID: " + UserID, font, 25);
     user.setPosition(5, 5);
     user.setFillColor(visualYellow);
@@ -159,9 +160,11 @@ void openFileBrowser(){
     
     for (int u = 0; u < datab.getFileCount(); u++) {
         sf::Text tmp(datab.getFilePaths()[u], font, 20);
-        tmp.setPosition(10, ((520 / datab.getFileCount()) * (u+1)) + 130);
         tmp.setFillColor(visualGreen);
         fileTexts.push_back(tmp);
+    }
+    for (int u = 0; u < fileTexts.size(); u++) {
+        fileTexts[u].setPosition(10, (((window.getSize().y - 20) / fileTexts.size()) * u) + 150);
     }
     
     std::vector<std::string> editorText;

@@ -59,5 +59,5 @@ extern const std::vector<std::string> EXPROFILE_LIST =
 "Gewicht: ",
 "Augenfarbe: ",
 "Haustiere: ",
-"Hobbys: ",
+"Hobbys: ", 
 "Notizen: " };

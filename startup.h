@@ -33,7 +33,7 @@ int check(std::string username, std::string password) {
     return -1;
 }
 
-int login() {
+std::string login() {
 
     hideConsole();
 
@@ -91,7 +91,7 @@ int login() {
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed) {
-                return -1;
+                exit(-1);
             }
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (user.getGlobalBounds().contains({ (float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y })) {
@@ -130,9 +130,9 @@ int login() {
                     }
                     else if (event.key.code == 13 && username != "\0") {
                         if (check(username, password) == 1) {
-                            return 1;
+                            return password;
                         }
-                        else return -1;
+                        exit(-1);
                         
                     }
                     else {
@@ -169,5 +169,6 @@ int login() {
         window.draw(passInput);
         window.display();
     }
-    return -1;
+    exit(-1);
+    return "error";
 }

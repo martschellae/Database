@@ -43,6 +43,9 @@ private:
 	std::vector<std::string> workFileContent;
 	std::string password;
 public:
+	void setPassword(std::string pass) {
+		password = pass;
+	}
 	bool exists(std::string path) {
 		for (int g = 0; g < dataBasePaths.size(); g++) {
 			if (dataBasePaths[g] == path)return true;
@@ -106,9 +109,7 @@ public:
 			workFile.close();
 		}else {
 			workFile.open(path, std::ios_base::out | std::ios_base::trunc);
-			workFile << "empty";
 			workFile.close();
-
 			openFileFromDatabase(rawpath);
 
 		}
