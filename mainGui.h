@@ -239,14 +239,16 @@ void openFileBrowser(){
                 window.setView(sf::View(visibleArea));
             }
             if (event.type == sf::Event::MouseButtonPressed) {
+
                 for (int g = 0; g < fileTexts.size(); g++) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
                         if (fileTexts[g].getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
-                            OpenFile:
+
                             editorText = datab.openFileFromDatabase(fileTexts[g].getString());
                             currentFile = fileTexts[g].getString();
                             std::string tmp = "Opened File: " + fileTexts[g].getString();
                             fEvent.registerEvent(tmp);
+
                             editorIndex = 0;
                         }
                     }

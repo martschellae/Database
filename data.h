@@ -41,6 +41,7 @@ private:
 	std::vector<std::string> dataBasePaths;
 	std::fstream workFile;
 	std::vector<std::string> workFileContent;
+	std::string password;
 public:
 	bool exists(std::string path) {
 		for (int g = 0; g < dataBasePaths.size(); g++) {
@@ -86,6 +87,8 @@ public:
 		updateDataBase();
 	}
 	std::vector<std::string> openFileFromDatabase(std::string path) {
+
+		std::string rawpath = path;
 		path = formatString(path);
 		workFileContent.resize(0);
 		workFileContent.shrink_to_fit();
@@ -94,14 +97,20 @@ public:
 		if (workFile.good()) {
 			while (!workFile.eof()) {
 				std::getline(workFile, line);
-				if (line != "" && line != "\0" && line != "\n")
-					workFileContent.push_back(line);
+				if (line != "" && line != "\0" && line != "\n") {
+					line = vignere(line, 0, createRandomKey(password));
+					workFileContent.push_back(line);	
+				}
 			}
+			workFileContent.push_back("");
 			workFile.close();
 		}else {
 			workFile.open(path, std::ios_base::out | std::ios_base::trunc);
-			workFile << "";
+			workFile << "empty";
 			workFile.close();
+
+			openFileFromDatabase(rawpath);
+
 		}
 		return workFileContent;
 	}
@@ -116,7 +125,7 @@ public:
 		path = formatString(path);
 		workFile.open(path, std::ios_base::out | std::ios_base::in);
 		for (int g = 0; g < workFileContent.size(); g++) {
-			workFile << workFileContent[g];
+			workFile << vignere(workFileContent[g], 1, createRandomKey(password));
 			workFile << "\n";
 		}
 		workFile.close();

@@ -64,3 +64,15 @@ std::string createRandomKey(unsigned int seed, unsigned int length = 128) {
 	}
 	return key;
 }
+std::string createRandomKey(std::string base, unsigned int length = 128) {
+	std::hash<std::string> hasher;
+	srand(hasher(base));
+	std::string key = "\0";
+
+	while (key.size() < length) {
+		int c = rand();
+		char u = (rand() % 94) + 32;
+		key += u;
+	}
+	return key;
+}
