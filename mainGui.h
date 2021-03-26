@@ -159,12 +159,12 @@ void openFileBrowser(std::string password){
     std::vector<sf::Text> fileTexts;
     
     for (int u = 0; u < datab.getFileCount(); u++) {
-        sf::Text tmp(datab.getFilePaths()[u], font, 20);
+        sf::Text tmp(datab.getFilePaths()[u], font, datab.getFileCount()*(-0.3) + 20);
         tmp.setFillColor(visualGreen);
         fileTexts.push_back(tmp);
     }
     for (int u = 0; u < fileTexts.size(); u++) {
-        fileTexts[u].setPosition(10, (((window.getSize().y - 20) / fileTexts.size()) * u) + 150);
+        fileTexts[u].setPosition(10, ((datab.getFileCount()* -1 +50) * u) + 150);
     }
     
     std::vector<std::string> editorText;
@@ -220,7 +220,12 @@ void openFileBrowser(std::string password){
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed) {
-                window.close();
+                if (MessageBoxA(0, "Are your sure you want to exit? Your files may not be saved", "Unsaved Changes", MB_YESNOCANCEL) == 6) {
+                    window.close();
+                }
+                else {
+                    goto SaveFile;
+                }
             }
             if (event.type == sf::Event::Resized)
             {
@@ -237,8 +242,9 @@ void openFileBrowser(std::string password){
                 bottomRight.setPosition(605, event.size.height - 145);
                 bottomRight.setSize(sf::Vector2f(event.size.width - 610, 140));
                 for (int u = 0; u < fileTexts.size(); u++) {
-                    fileTexts[u].setPosition(10, (((event.size.height-20) / fileTexts.size()) * u) + 150);
+                    fileTexts[u].setPosition(10, ((datab.getFileCount() * -1 + 50) * u) + 150);
                 }
+
                 window.setView(sf::View(visibleArea));
             }
             if (event.type == sf::Event::MouseButtonPressed) {
