@@ -185,7 +185,7 @@ void openFileBrowser(std::string password){
     int shakeIndex = 20;
 
     sf::RectangleShape caret;
-    caret.setSize(sf::Vector2f(2, 25));
+    caret.setSize(sf::Vector2f(5, 25));
     caret.setFillColor(visualBlue);
 
     float caretX = 385;
@@ -360,7 +360,7 @@ void openFileBrowser(std::string password){
                 }
             }
         }
-        caret.setPosition(sf::Vector2f(370 + ((editorText[editorIndex].size()+1) * 16), 24.0*editorIndex + 15));
+        caret.setPosition(sf::Vector2f(375, 24.1*editorIndex + 15));
 
         mPosition = {(sf::Mouse::getPosition().x / 40) - 30.0f, (sf::Mouse::getPosition().y / 40) - 30.0f};
 
