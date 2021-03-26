@@ -146,18 +146,18 @@ std::string login() {
 
         }
         if (userTarget) {
-            user.setFillColor(darkness);
-            pass.setFillColor(background);
+            user.setFillColor(background);
+            pass.setFillColor(darktheme);
         }
         else {
-            user.setFillColor(background);
+            user.setFillColor(darktheme);
         }
         if (passTarget) {
-            pass.setFillColor(darkness);
-            user.setFillColor(background);
+            pass.setFillColor(background);
+            user.setFillColor(darktheme);
         }
         else {
-            pass.setFillColor(background);
+            pass.setFillColor(darktheme);
         }
 
         for (int x = 0; x < particleCount; x++) {
