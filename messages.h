@@ -7,9 +7,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "paths.h"
+#include "configurations.h"
 #include "data.h"
-#include "colors.h"
 
 std::string processMessage(sf::Packet p, bool rce) {
 	std::string input = "\0";

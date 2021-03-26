@@ -7,10 +7,9 @@
 #include <iostream>
 #include <fstream>
 
-#include "paths.h"
+#include "configurations.h"
 #include "data.h"
 #include "newFile.h"
-#include "colors.h"
 #include "templates.h"
 #include "networking.h"
 

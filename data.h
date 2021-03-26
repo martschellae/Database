@@ -9,7 +9,7 @@
 #include <vector>
 #include <Windows.h>
 
-#include "paths.h"
+#include "configurations.h"
 #include "keygen.h"
 #include "templates.h"
 

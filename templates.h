@@ -7,9 +7,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "paths.h"
+#include "configurations.h"
 #include "data.h"
-#include "colors.h"
 
 int r(int x) {
     int y = (x - 20) + rand() % 40;

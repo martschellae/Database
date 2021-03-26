@@ -7,7 +7,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "paths.h"
+#include "configurations.h"
 #include "data.h"
 
 std::string enterFileName() {

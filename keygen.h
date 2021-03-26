@@ -8,7 +8,7 @@
 #include <fstream>
 #include <vector>
 
-#include "paths.h"
+#include "configurations.h"
 
 char caesar(char x, int y) {
 	if (y < 0) {

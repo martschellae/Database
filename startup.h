@@ -7,9 +7,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "paths.h"
+#include "configurations.h"
 #include "data.h"
-#include "colors.h"
 
 int check(std::string username, std::string password) {
 
