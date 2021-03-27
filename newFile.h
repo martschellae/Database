@@ -11,9 +11,6 @@
 #include "data.h"
 
 std::string enterFileName() {
-    sf::Color bright(sf::Color(255, 255, 255));
-    sf::Color dark(sf::Color(180, 180, 180));
-    sf::Color darker(sf::Color(130, 130, 130));
 
     sf::Font font;
     font.loadFromFile(FONT);

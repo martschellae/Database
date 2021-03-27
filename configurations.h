@@ -6,6 +6,51 @@
 
 #include <iostream>
 #include <fstream>
+#include <Windows.h>
+#include <string>
+#include <sstream>
+
+sf::Color string_to_color(std::string hex_value) {
+	hex_value.replace(hex_value.begin(), hex_value.begin() + 1, "");
+	sf::Color ret;
+	int values[6] = {0, 0, 0, 0, 0, 0};
+	for (int z = 0; z < hex_value.size(); z++) {
+		switch (hex_value[z]) {
+		default:
+			values[z] = hex_value[z] - 48;
+			break;
+		case 'A':
+		case 'a':
+			values[z] = 10;
+			break;
+		case 'B':
+		case 'b':
+			values[z] = 11;
+			break;
+		case 'C':
+		case 'c':
+			values[z] = 12;
+			break;
+		case 'D':
+		case 'd':
+			values[z] = 13;
+			break;
+		case 'E':
+		case 'e':
+			values[z] = 14;
+			break;
+		case 'F':
+		case 'f':
+			values[z] = 15;
+			break;
+		}
+	}
+	ret.r = values[0] * 16 + values[1];
+	ret.g = values[2] * 16 + values[3];
+	ret.b = values[4] * 16 + values[5];
+	
+	return ret;
+}
 
 #define FONT "assets/fonts/font.ttf"
 #define SAVE "assets/dependencies/key.hash"
@@ -21,10 +66,9 @@
 #define EXPF "assets/dependencies/exprofile.png"
 #define SERV "assets/dependencies/server.png"
 #define CLIE "assets/dependencies/client.png"
-
+#define CONF "assets/conf/config"
 
 #define DATA_TYPE_BASEFILE ".xyz"
-#define DATA_TYPE_KEYFILE ".key"
 
 extern sf::Color invisible(sf::Color(0, 0, 0, 0));
 extern sf::Color bright(sf::Color(255, 255, 255));
@@ -79,4 +123,31 @@ extern const std::vector<std::string> EXPROFILE_LIST =
 
 void readConfigFile() {
 
+	std::vector<std::string> file;
+	int size = 0;
+	std::ifstream input;
+	input.open(CONF, std::ios_base::in);
+
+	if (!input.good()) {
+		return;
+	}
+	std::string line;
+	while (!input.eof()) {
+		std::getline(input, line);
+		file.push_back(line);
+		line = "\0";
+		size++;
+	}
+	if (size != 9) {
+		ShowWindow(GetConsoleWindow(), SW_SHOW);
+		std::cout << size;
+		std::cerr << "Fatal Error: Bad format. Check config file or try resetting the file.\n";
+		system("pause");
+		exit(-1);
+	}
+
+	visualBlue = string_to_color(file[2]);
+	visualYellow = string_to_color(file[4]);
+	visualGreen = string_to_color(file[6]);
+	visualRed = string_to_color(file[8]);
 }

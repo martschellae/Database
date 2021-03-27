@@ -21,7 +21,7 @@ int captcha() {
         sf::CircleShape temp;
         temp.setPointCount(6);
         temp.setRotation(rand() % 360);
-        temp.setFillColor(sf::Color(R(220), R(202), rand()%255, rand()%50));
+        temp.setFillColor(sf::Color(R(visualYellow.r), R(visualYellow.g), rand()%255, rand()%50));
         temp.setRadius(rand() % 20 + 5);
         sf::Vector2f tmp(rand() % 600 - 300, rand() % 600 - 300);
         particlePos.push_back(tmp);

@@ -64,7 +64,7 @@ void openFileBrowser(std::string password){
         sf::CircleShape temp;
         temp.setPointCount(8);
         temp.setRotation(rand() % 360);
-        temp.setFillColor(sf::Color(R(78), R(201), R(176), r(20)));
+        temp.setFillColor(sf::Color(R(visualGreen.r), R(visualGreen.g), R(visualGreen.b), r(20)));
         temp.setRadius(rand() % 10 + 5);
         sf::Vector2f tmp(rand() % 5000 - 2500, rand() % 2500 - 1250);
         particlePos.push_back(tmp);

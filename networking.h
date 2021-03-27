@@ -146,7 +146,7 @@ Type networkManager() {
         sf::CircleShape temp;
         temp.setPointCount(8);
         temp.setRotation(rand() % 360);
-        temp.setFillColor(sf::Color(R(173), R(83), R(83), r(20)));
+        temp.setFillColor(sf::Color(R(visualRed.r), R(visualRed.g), R(visualRed.b), r(20)));
         temp.setRadius(rand() % 10 + 5);
         sf::Vector2f tmp(rand() % 10000 - 5000, rand() % 5000 - 2500);
         particlePos.push_back(tmp);
@@ -502,7 +502,7 @@ void networkInterface() {
 
     if (isClient) {
         for (int x = 0; x < particleCount; x++)
-            particles[x].setFillColor(sf::Color(R(78), R(201), R(176), 3));
+            particles[x].setFillColor(sf::Color(R(visualGreen.r), R(visualGreen.g), R(visualGreen.b), 3));
         network.tcpSocket.setBlocking(false);
         while (window.isOpen())
         {
