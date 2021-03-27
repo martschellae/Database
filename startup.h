@@ -44,7 +44,7 @@ std::string login() {
         sf::CircleShape temp;
         temp.setPointCount(6);
         temp.setRotation(rand() % 360);
-        temp.setFillColor(sf::Color(R(220), R(202), R(120), rand()%50+10));
+        temp.setFillColor(sf::Color(R(visualYellow.r), R(visualYellow.g), R(visualYellow.b), rand()%50+10));
         temp.setRadius(rand() % 200 + 5);
         sf::Vector2f tmp(rand() % 1400 - 700, rand() % 300 - 150);
         particlePos.push_back(tmp);
