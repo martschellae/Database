@@ -19,6 +19,14 @@ char caesar(char x, int y) {
 	x += 32;
 	return x;
 }
+UINT8 caesar(int x, int y) {
+	if (y < 0) {
+		y = 256 + y;
+	}
+	x = (x + y) % 256;
+
+	return static_cast<UINT8>(x);
+}
 
 std::string caesar(std::string x, int y) {
 	for (int f = 0; f < x.size(); f++) {
@@ -91,20 +99,11 @@ void encryptPicture(std::string path, std::string key) {
 	int c = 0;
 	for (int y = 0; y < old.getSize().y; y++) {
 		for (int x = 0; x < old.getSize().x; x++) {
-			//sf::Color worker;
-			/*worker = old.getPixel(x, y);
-			worker.r = (worker.r - keyword[c]) % 255;
-			worker.r = (worker.r + keyword[c]) % 255;
-			c++;
-			worker.g = (worker.g - keyword[c]) % 255;
-			worker.g = (worker.g + keyword[c]) % 255;
-			c++;
-			worker.b = (worker.b - keyword[c]) % 255;
-			worker.b = (worker.b + keyword[c]) % 255;
-			c++;
-			*/
-			
-			new_Image.setPixel(x, y, { (UINT8)(old.getPixel(x, y).r + keyword[c]), (UINT8)(old.getPixel(x, y).g + keyword[c]), (UINT8)(old.getPixel(x, y).b + keyword[c])});
+			UINT8 r = old.getPixel(x, y).r + keyword[c];
+			UINT8 g = old.getPixel(x, y).g + keyword[c];
+			UINT8 b = old.getPixel(x, y).b + keyword[c];
+
+			new_Image.setPixel(x, y, {r, g, b});
 			c++;
 		}
 	}
@@ -126,16 +125,14 @@ void decryptPicture(std::string path, std::string key) {
 	int c = 0;
 	for (int y = 0; y < old.getSize().y; y++) {
 		for (int x = 0; x < old.getSize().x; x++) {
-			sf::Color worker;
-			worker = old.getPixel(x, y);
-			worker.r = (worker.r + keyword[c] * 16) % 255;
+			UINT8 r = old.getPixel(x, y).r - keyword[c];
+			UINT8 g = old.getPixel(x, y).g - keyword[c];
+			UINT8 b = old.getPixel(x, y).b - keyword[c];
+
+			if(r > 250 || r < 5)
+			std::cout << "R: " << std::to_string(r) << "\tG: " << std::to_string(g) << "\tB: " << std::to_string(b) << "\n";
+			new_Image.setPixel(x, y, {r, g, b});
 			c++;
-			worker.g = (worker.g + keyword[c] * 16) % 255;
-			c++;
-			worker.b = (worker.b + keyword[c] * 16) % 255;
-			c++;
-			worker.a = 255;
-			new_Image.setPixel(x, y, worker);
 		}
 	}
 	new_Image.saveToFile(path);
