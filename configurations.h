@@ -66,6 +66,7 @@ sf::Color string_to_color(std::string hex_value) {
 #define EXPF "assets/dependencies/exprofile.png"
 #define SERV "assets/dependencies/server.png"
 #define CLIE "assets/dependencies/client.png"
+#define IMAG "assets/dependencies/image.png"
 #define CONF "assets/conf/config"
 
 #define DATA_TYPE_BASEFILE ".xyz"

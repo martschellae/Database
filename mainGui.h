@@ -38,7 +38,7 @@ public:
     }
 };
 
-void openFileBrowser(std::string password){
+void openFileBrowser(std::string password) {
 
     hideConsole();
     std::string UserID;
@@ -120,6 +120,10 @@ void openFileBrowser(std::string password){
     standardButton.setPosition(390, 655);
     standardButton.setFillColor(visualRed);
 
+    sf::Text imageButton("Apply Template", font, 20);
+    imageButton.setPosition(390, 655);
+    imageButton.setFillColor(visualRed);
+
     sf::RectangleShape upperLeft;
     upperLeft.setPosition(5, 5);
     upperLeft.setSize(sf::Vector2f(370, 140));
@@ -154,6 +158,20 @@ void openFileBrowser(std::string password){
     bottomRight.setOutlineColor(darktheme);
     bottomRight.setOutlineThickness(5);
     bottomRight.setFillColor(invisible);
+
+    sf::RectangleShape bottomRight2;
+    bottomRight2.setPosition(1155, 555);
+    bottomRight2.setSize(sf::Vector2f(140, 140));
+    bottomRight2.setOutlineColor(darktheme);
+    bottomRight2.setOutlineThickness(5);
+    bottomRight2.setFillColor(invisible);
+
+    sf::Texture imgTex;
+    imgTex.loadFromFile(IMAG);
+    sf::Sprite imgSprite;
+    imgSprite.setTexture(imgTex);
+    imgSprite.setPosition(window.getSize().x - 138, window.getSize().y - 138);
+    imgSprite.setColor(dark);
 
     std::vector<sf::Text> fileTexts;
     
@@ -229,10 +247,10 @@ void openFileBrowser(std::string password){
             if (event.type == sf::Event::Resized)
             {
                 sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-                upperRight.setSize(sf::Vector2f(event.size.width - 385, event.size.height-10));
+                upperRight.setSize(sf::Vector2f(event.size.width - 385, event.size.height - 10));
                 bottomLeft.setSize(sf::Vector2f(370, event.size.height - 155));
-                fEvent.eventInterface.setPosition(sf::Vector2f(610, event.size.height-140));
-                newButton.setPosition(390, event.size.height-135);
+                fEvent.eventInterface.setPosition(sf::Vector2f(610, event.size.height - 140));
+                newButton.setPosition(390, event.size.height - 135);
                 saveButton.setPosition(390, event.size.height - 105);
                 clearButton.setPosition(390, event.size.height - 75);
                 standardButton.setPosition(390, event.size.height - 45);
@@ -240,6 +258,10 @@ void openFileBrowser(std::string password){
                 middleRight.setSize(sf::Vector2f(event.size.width- 385, 140));
                 bottomRight.setPosition(605, event.size.height - 145);
                 bottomRight.setSize(sf::Vector2f(event.size.width - 610, 140));
+                bottomRight2.setPosition(event.size.width - 145, event.size.height - 145);
+                imgSprite.setPosition(window.getSize().x - 138, window.getSize().y - 138);
+
+
                 for (int u = 0; u < fileTexts.size(); u++) {
                     fileTexts[u].setPosition(10, ((datab.getFileCount() * -1 + 50) * u) + 150);
                 }
@@ -389,6 +411,7 @@ void openFileBrowser(std::string password){
         window.draw(upperRight);
         window.draw(middleRight);
         window.draw(bottomRight);
+        window.draw(bottomRight2);
         window.draw(user);
         window.draw(pass);
         window.draw(files);
@@ -399,6 +422,7 @@ void openFileBrowser(std::string password){
         window.draw(saveButton);
         window.draw(clearButton);
         window.draw(standardButton);
+        window.draw(imgSprite);
         window.draw(fEvent.eventInterface);
         window.draw(editorContent);
         window.draw(caret);

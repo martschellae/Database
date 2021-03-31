@@ -10,6 +10,8 @@
 
 #include "configurations.h"
 
+
+
 char caesar(char x, int y) {
 	if (y < 0) {
 		y = 94 + y;
@@ -74,7 +76,7 @@ std::string createRandomKey(unsigned int seed, unsigned int length = 128) {
 }
 std::string createRandomKey(std::string base, unsigned int length = 128) {
 	std::hash<std::string> hasher;
-	srand(hasher(base));
+	srand(hasher(base) * length);
 	std::string key = "\0";
 
 	while (key.size() < length) {
@@ -94,7 +96,7 @@ void encryptPicture(std::string path, std::string key) {
 		keyword += keyword;
 	}
 	sf::Image new_Image;
-	new_Image.create(old.getSize().x, old.getSize().y);
+	new_Image.create(old.getSize().x, old.getSize().y, {255, 255, 255});
 	
 	int c = 0;
 	for (int y = 0; y < old.getSize().y; y++) {
@@ -120,7 +122,7 @@ void decryptPicture(std::string path, std::string key) {
 	}
 
 	sf::Image new_Image;
-	new_Image.create(old.getSize().x, old.getSize().y, {0, 0, 0});
+	new_Image.create(old.getSize().x, old.getSize().y, {255, 255, 255});
 	
 	int c = 0;
 	for (int y = 0; y < old.getSize().y; y++) {
@@ -129,8 +131,8 @@ void decryptPicture(std::string path, std::string key) {
 			UINT8 g = old.getPixel(x, y).g - keyword[c];
 			UINT8 b = old.getPixel(x, y).b - keyword[c];
 
-			if(r > 250 || r < 5)
-			std::cout << "R: " << std::to_string(r) << "\tG: " << std::to_string(g) << "\tB: " << std::to_string(b) << "\n";
+			//if(r > 250 || r < 5)
+			//std::cout << "R: " << std::to_string(r) << "\tG: " << std::to_string(g) << "\tB: " << std::to_string(b) << "\n";
 			new_Image.setPixel(x, y, {r, g, b});
 			c++;
 		}
