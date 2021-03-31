@@ -171,7 +171,7 @@ void openFileBrowser(std::string password) {
     sf::Sprite imgSprite;
     imgSprite.setTexture(imgTex);
     imgSprite.setPosition(window.getSize().x - 138, window.getSize().y - 138);
-    imgSprite.setColor(dark);
+    imgSprite.setColor(sf::Color(247, 17, 116)); //TODO
 
     std::vector<sf::Text> fileTexts;
     
