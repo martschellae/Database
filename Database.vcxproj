@@ -157,6 +157,7 @@
     <ClInclude Include="captcha.h" />
     <ClInclude Include="configurations.h" />
     <ClInclude Include="data.h" />
+    <ClInclude Include="images.h" />
     <ClInclude Include="keygen.h" />
     <ClInclude Include="mainGui.h" />
     <ClInclude Include="messages.h" />

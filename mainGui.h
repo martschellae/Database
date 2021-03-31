@@ -12,6 +12,7 @@
 #include "newFile.h"
 #include "templates.h"
 #include "networking.h"
+#include "images.h"
 
 class FileEvent {
 private:
@@ -329,6 +330,9 @@ void openFileBrowser(std::string password) {
                 }
                 if (files.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
                     networkInterface();
+                }
+                if (imgSprite.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
+                    imageInterface();
                 }
             }
             if (event.type == sf::Event::KeyPressed) {

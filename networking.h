@@ -403,8 +403,6 @@ Type networkManager() {
 
 void networkInterface() {
 
-	showConsole();
-
     sf::Clock time;
 
     Type networkType = networkManager();
@@ -440,7 +438,7 @@ void networkInterface() {
         sf::CircleShape temp;
         temp.setPointCount(rand()%2+4);
         temp.setRotation(rand() % 360);
-        temp.setFillColor(sf::Color(R(173), R(83), R(83), 3));
+        temp.setFillColor(sf::Color(R(visualRed.r), R(visualRed.g), R(visualRed.b), 3));
         temp.setRadius(rand() % 200 + 50);
         sf::Vector2f tmp(rand() % 5000 - 2500, rand() % 2500 - 1250);
         particlePos.push_back(tmp);
