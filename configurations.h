@@ -84,6 +84,38 @@ extern sf::Color visualBlue(sf::Color(92, 186, 247));
 extern sf::Color visualYellow(sf::Color(220, 202, 120));
 extern sf::Color visualGreen(sf::Color(78, 201, 176));
 extern sf::Color visualRed(sf::Color(173, 83, 83));
+extern sf::Color visualPink(sf::Color(247, 17, 116));
+
+sf::Color hsvToRgb(float H, float S, float V) {
+	float s = S / 100;
+	float v = V / 100;
+	float C = s * v;
+	float X = C * (1 - abs(fmod(H / 60.0, 2) - 1));
+	float m = v - C;
+	float r, g, b;
+	if (H >= 0 && H < 60) {
+		r = C, g = X, b = 0;
+	}
+	else if (H >= 60 && H < 120) {
+		r = X, g = C, b = 0;
+	}
+	else if (H >= 120 && H < 180) {
+		r = 0, g = C, b = X;
+	}
+	else if (H >= 180 && H < 240) {
+		r = 0, g = X, b = C;
+	}
+	else if (H >= 240 && H < 300) {
+		r = X, g = 0, b = C;
+	}
+	else {
+		r = C, g = 0, b = X;
+	}
+	int R = (r + m) * 255;
+	int G = (g + m) * 255;
+	int B = (b + m) * 255;
+	return sf::Color(R, G, B, 255);
+}
 
 extern const std::vector<std::string> STANDARD_LIST = { "Notizen: " };
 extern const std::vector<std::string> PROFILE_LIST =

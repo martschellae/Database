@@ -13,8 +13,87 @@
 #include "templates.h"
 #include "networking.h"
 
+class ParticleSystem : public sf::Drawable, public sf::Transformable
+{
+public:
+
+    ParticleSystem(unsigned int count) :
+        m_particles(count),
+        m_vertices(sf::Points, count),
+        m_lifetime(sf::seconds(3.f)),
+        m_emitter(0.f, 0.f)
+    {
+    }
+
+    void setEmitter(sf::Vector2f position)
+    {
+        m_emitter = position;
+    }
+
+    void update(sf::Time elapsed)
+    {
+        for (std::size_t i = 0; i < m_particles.size(); ++i)
+        {
+            // update the particle lifetime
+            Particle& p = m_particles[i];
+            p.lifetime -= elapsed;
+
+            // if the particle is dead, respawn it
+            if (p.lifetime <= sf::Time::Zero)
+                resetParticle(i);
+
+            // update the position of the corresponding vertex
+            m_vertices[i].position += p.velocity * elapsed.asSeconds();
+
+            // update the alpha (transparency) of the particle according to its lifetime
+            float ratio = p.lifetime.asSeconds() / m_lifetime.asSeconds();
+            m_vertices[i].color.a = static_cast<sf::Uint8>(ratio * 255);
+        }
+    }
+
+private:
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
+    {
+        // apply the transform
+        states.transform *= getTransform();
+
+        // our particles don't use a texture
+        states.texture = NULL;
+
+        // draw the vertex array
+        target.draw(m_vertices, states);
+    }
+
+private:
+
+    struct Particle
+    {
+        sf::Vector2f velocity;
+        sf::Time lifetime;
+    };
+
+    void resetParticle(std::size_t index)
+    {
+        // give a random velocity and lifetime to the particle
+        float angle = (std::rand() % 360) * 3.14f / 180.f;
+        float speed = (std::rand() % 50) + 50.f;
+        m_particles[index].velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
+        m_particles[index].lifetime = sf::milliseconds((std::rand() % 2000) + 1000);
+
+        // reset the position of the corresponding vertex
+        m_vertices[index].position = m_emitter;
+    }
+
+    std::vector<Particle> m_particles;
+    sf::VertexArray m_vertices;
+    sf::Time m_lifetime;
+    sf::Vector2f m_emitter;
+};
+
 void imageInterface() {
 
+    showConsole();
     sf::Clock time;
 
     sf::Font font;
@@ -22,13 +101,13 @@ void imageInterface() {
 
     std::vector<sf::CircleShape> particles;
     std::vector<sf::Vector2f> particlePos;
-    int particleCount = 2300;
+    int particleCount = 1000;
     srand(GetTickCount64());
     for (int x = 0; x < particleCount; x++) {
         sf::CircleShape temp;
         temp.setPointCount(rand() % 2 + 4);
         temp.setRotation(rand() % 360);
-        temp.setFillColor(sf::Color(R(173), R(83), R(83), 3));
+        temp.setFillColor(sf::Color(R(visualPink.r), R(visualPink.g), R(visualPink.b), 1));
         temp.setRadius(rand() % 200 + 50);
         sf::Vector2f tmp(rand() % 5000 - 2500, rand() % 2500 - 1250);
         particlePos.push_back(tmp);
@@ -38,115 +117,98 @@ void imageInterface() {
 
     sf::RenderWindow window(sf::VideoMode(1300, 700), "Image Manager");
 
-    sf::Text chatTitle("Chat:", font, 20);
-    chatTitle.setPosition(655, 10);
-    chatTitle.setFillColor(visualBlue);
+    sf::RectangleShape menuBar;
+    menuBar.setPosition(5, window.getSize().y / 2 - 100);
+    menuBar.setSize(sf::Vector2f(64, 200));
+    menuBar.setOutlineColor(visualRed);
+    menuBar.setOutlineThickness(5);
+    menuBar.setFillColor(invisible);
 
-    sf::RectangleShape chatRect;
-    chatRect.setPosition(650, 5);
-    chatRect.setSize(sf::Vector2f(645, 690));
-    chatRect.setOutlineColor(darktheme);
-    chatRect.setOutlineThickness(5);
-    chatRect.setFillColor(invisible);
+    sf::Image image;
+    image.loadFromFile("assets/image.jpg");
 
-    sf::RectangleShape statusRect;
-    statusRect.setPosition(5, 5);
-    statusRect.setSize(sf::Vector2f(640, 300));
-    statusRect.setOutlineColor(darktheme);
-    statusRect.setOutlineThickness(5);
-    statusRect.setFillColor(invisible);
+    sf::Texture displayTexture;
+    displayTexture.loadFromFile("assets/image.jpg");
+    displayTexture.update(image);
 
-    sf::RectangleShape actionsRect;
-    actionsRect.setPosition(5, 310);
-    actionsRect.setSize(sf::Vector2f(640, window.getSize().y - 315));
-    actionsRect.setOutlineColor(darktheme);
-    actionsRect.setOutlineThickness(5);
-    actionsRect.setFillColor(invisible);
 
-    sf::Text disButton("Dis", font, 30);
-    disButton.setFillColor(visualRed);
-    disButton.setPosition(445, 265);
+    sf::Color pick = sf::Color::Red;
+    sf::VertexArray colorPalette(sf::Quads, 4);
+    colorPalette[0].color = sf::Color::White;
+    colorPalette[0].position = { 0, 0 };
+    colorPalette[1].color = pick;
+    colorPalette[1].position = { 1000, 0 };
+    colorPalette[2].color = pick;
+    colorPalette[2].position = { 1000, 1000 };
+    colorPalette[3].color = sf::Color::Black;
+    colorPalette[3].position = { 0, 1000 };
 
-    sf::Text connectButton("connect", font, 30);
-    connectButton.setFillColor(visualGreen);
-    connectButton.setPosition(500, 265);
-
-    sf::Text StatusInformation("", font, 20);
-    StatusInformation.setPosition(5, 5);
-    StatusInformation.setFillColor(visualYellow);
-
-    std::string chatMessage = "";
-    sf::Text chatText("Enter Message", font, 20);
-    chatText.setPosition(655, window.getSize().y - 30);
-
-    chat c;
-    c.text.setFont(font);
-    c.text.setPosition(655, 35);
-    c.text.setCharacterSize(15);
-    c.text.setFillColor(visualRed);
-    c.setLineCount(35);
-
-    window.setFramerateLimit(30);
+    sf::Sprite display;
+    display.setTexture(displayTexture);
+    display.setPosition(sf::Vector2f(0, 0));
+    display.setScale(window.getSize().x / displayTexture.getSize().x, window.getSize().y / displayTexture.getSize().y);
 
     bool isChat = false;
 
+    float zoom = 1.0f;
+    
+    float scale = 1.0f;
+
+    sf::Vector2f imagePosition;
+
+    sf::Vector2f mouseOnImagePos;
+
     while (window.isOpen()) {
+
+        displayTexture.update(image);
+        display.setTexture(displayTexture);
+
+        mouseOnImagePos = { (sf::Mouse::getPosition(window).x - display.getGlobalBounds().left) / scale , (sf::Mouse::getPosition(window).y - display.getGlobalBounds().top) / scale };
 
         window.clear(background);
         sf::Event event;
-        while (window.pollEvent(event))
+        if(window.pollEvent(event))
         {
-
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
             if (event.type == sf::Event::Resized) {
                 sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+                scale = zoom * (event.size.width / (float)displayTexture.getSize().x);
                 window.setView(sf::View(visibleArea));
-                chatRect.setSize(sf::Vector2f(event.size.width - 655, event.size.height - 10));
-                actionsRect.setSize(sf::Vector2f(640, event.size.height - 315));
-                chatText.setPosition(655, window.getSize().y - 30);
+                menuBar.setPosition(5, event.size.height / 2-100);
             }
-            if (event.type == sf::Event::MouseButtonPressed) {
-                if (chatRect.getGlobalBounds().contains({ (float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y })) {
-                    isChat = true;
-                }
-                else isChat = false;
-            }
-            if (event.type == sf::Event::TextEntered) {
-                if (isChat) {
-                    if (event.key.code == 8) {
-                        if (chatMessage.size() >= 1) {
-                            chatMessage.replace(chatMessage.end() - 1, chatMessage.end(), "");
-                            chatText.setString(chatMessage);
-                        }
-                    }
-                    else if (event.key.code == 13) {
-                        c.width = 200;
-                        c.addLine(("[YOU]: " + chatMessage));
-                        sf::Packet p;
-                        p << chatMessage;
-                        chatMessage = "";
-                        chatText.setString("Enter Message");
-                    }
-                    else {
-                        chatMessage += event.text.unicode;
-                        chatText.setString(chatMessage);
-                    }
-                }
+            //if (event.type == sf::Event::MouseButtonPressed) {
+               // image.setPixel((UINT)mouseOnImagePos.x, (UINT)mouseOnImagePos.y, sf::Color::Black);
+            //}
+            if (event.type == sf::Event::MouseWheelScrolled) {
+                zoom += 0.05 * event.mouseWheelScroll.delta;
             }
         }
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+            image.setPixel((UINT)mouseOnImagePos.x, (UINT)mouseOnImagePos.y-1, sf::Color::Black);
+            image.setPixel((UINT)mouseOnImagePos.x-1, (UINT)mouseOnImagePos.y, sf::Color::Black);
+            image.setPixel((UINT)mouseOnImagePos.x-1, (UINT)mouseOnImagePos.y-1, sf::Color::Black);
+            image.setPixel((UINT)mouseOnImagePos.x-1, (UINT)mouseOnImagePos.y+1, sf::Color::Black);
+            image.setPixel((UINT)mouseOnImagePos.x, (UINT)mouseOnImagePos.y, sf::Color::Black);
+            image.setPixel((UINT)mouseOnImagePos.x+1, (UINT)mouseOnImagePos.y - 1, sf::Color::Black);
+            image.setPixel((UINT)mouseOnImagePos.x+1, (UINT)mouseOnImagePos.y+1, sf::Color::Black);
+            image.setPixel((UINT)mouseOnImagePos.x+1, (UINT)mouseOnImagePos.y, sf::Color::Black);
+            image.setPixel((UINT)mouseOnImagePos.x, (UINT)mouseOnImagePos.y+1, sf::Color::Black);
+        }
+        imagePosition = { (float)window.getSize().x / 2 - (float)displayTexture.getSize().x * display.getScale().x / 2, (float)window.getSize().y / 2 - (float)displayTexture.getSize().y * display.getScale().y / 2 };
+
+        scale = zoom * (window.getSize().x / (float)displayTexture.getSize().x);
+
+        display.setPosition(imagePosition);
+        display.setScale(scale, scale);
 
         for (int x = 0; x < particleCount; x++)
             window.draw(particles[x]);
 
-        window.draw(statusRect);
-        window.draw(chatRect);
-        window.draw(actionsRect);
-        window.draw(chatTitle);
-        window.draw(chatText);
-        window.draw(c.getText());
-        window.draw(StatusInformation);
+        window.draw(display);
+        window.draw(menuBar);
+        //window.draw(colorPalette);
         window.display();
     }
 }
