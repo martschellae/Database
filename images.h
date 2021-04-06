@@ -121,11 +121,21 @@ void imageInterface() {
                 }
                 if (encryptFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
                     fileName = inputBox("Enter Filename(with .):", "Name:");
+                    if (fileName == "") {
+                        MessageBox(0, L"Invalid Filename", L"Error", MB_OK);
+                    } else {
                     encryptPicture(fileName, createRandomKey(inputBox("Enter Password for Encryption", "Passw:")));
+                    displayTexture.loadFromFile(fileName);
+                    }
+                    
                 }
                 if (decryptFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
                     fileName = inputBox("Enter Filename(with .):", "Name:");
+                    if (fileName == "") {
+                        MessageBox(0, L"Invalid Filename", L"Error", MB_OK);
+                    }
                     encryptPicture(fileName, createRandomKey(inputBox("Enter Password for Encryption", "Passw:")));
+                    displayTexture.loadFromFile(fileName);
                 }
 
             }
