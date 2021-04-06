@@ -113,15 +113,20 @@ void imageInterface() {
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                 if (openFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
                     fileName = inputBox("Enter Filename(with .): ", "File:");
-                    displayTexture.loadFromFile(fileName);
+                    if (fileName.length() < 5) {
+                        MessageBox(0, L"Invalid Filename", L"Error", MB_OK);
+                    } else {
+                        if (!displayTexture.loadFromFile(fileName)) {
+                            MessageBox(0, L"File does not exist, check path", L"Error", MB_OK);
+                        }
+                    }
                 }
                 if (closeFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
                     displayTexture.loadFromFile("assets/testImage.jpg");
-                    
                 }
                 if (encryptFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
                     fileName = inputBox("Enter Filename(with .):", "Name:");
-                    if (fileName == "") {
+                    if (fileName.length() < 5) {
                         MessageBox(0, L"Invalid Filename", L"Error", MB_OK);
                     } else {
                     encryptPicture(fileName, createRandomKey(inputBox("Enter Password for Encryption", "Passw:")));
@@ -131,7 +136,7 @@ void imageInterface() {
                 }
                 if (decryptFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
                     fileName = inputBox("Enter Filename(with .):", "Name:");
-                    if (fileName == "") {
+                    if (fileName.length() < 5) {
                         MessageBox(0, L"Invalid Filename", L"Error", MB_OK);
                     }
                     encryptPicture(fileName, createRandomKey(inputBox("Enter Password for Encryption", "Passw:")));

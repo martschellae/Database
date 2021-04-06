@@ -88,7 +88,7 @@ void encryptPicture(std::string path, std::string key) {
 	std::string keyword = key;
 	sf::Image old;
 	if (!old.loadFromFile(path)) {
-		std::cout << "datei error";
+		MessageBox(0, L"Invalid Filename", L"Error", MB_OK);
 	}
 	while (keyword.size() < (old.getSize().x * old.getSize().y * 3)) {
 		keyword += keyword;
@@ -113,7 +113,7 @@ void decryptPicture(std::string path, std::string key) {
 	std::string keyword = key;
 	sf::Image old;
 	if (!old.loadFromFile(path)) {
-		std::cout << "datei error";
+		MessageBox(0, L"Invalid Filename", L"Error", MB_OK);
 	}
 	while (keyword.size() < (old.getSize().x * old.getSize().y * 3)) {
 		keyword += keyword;
