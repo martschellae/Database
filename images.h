@@ -12,6 +12,7 @@
 #include "newFile.h"
 #include "templates.h"
 #include "networking.h"
+#include "newFile.h"
 
 void imageInterface() {
 

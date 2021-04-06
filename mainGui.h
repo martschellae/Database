@@ -302,7 +302,7 @@ void openFileBrowser(std::string password) {
                     }
                 }
                 if (newButton.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
-                    std::string fName = enterFileName();
+                    std::string fName = inputBox("Enter Filename: ", "Name:");
                     datab.addFileToDatabase(fName);
                     std::string tmp = "Created new File: " + fName;
                     currentFile = fName;
