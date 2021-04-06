@@ -29,7 +29,7 @@ void imageInterface() {
         sf::CircleShape temp;
         temp.setPointCount(rand() % 2 + 4);
         temp.setRotation(rand() % 360);
-        temp.setFillColor(sf::Color(R(visualPink.r), R(visualPink.g), R(visualPink.b), 1));
+        temp.setFillColor(sf::Color(R(visualPink.r), R(visualPink.g), R(visualPink.b), 3));
         temp.setRadius(rand() % 200 + 50);
         sf::Vector2f tmp(rand() % 5000 - 2500, rand() % 2500 - 1250);
         particlePos.push_back(tmp);
@@ -38,13 +38,6 @@ void imageInterface() {
     }
 
     sf::RenderWindow window(sf::VideoMode(1300, 700), "Image Manager");
-
-    sf::RectangleShape menuBar;
-    menuBar.setPosition(5, window.getSize().y / 2 - 100);
-    menuBar.setSize(sf::Vector2f(64, 200));
-    menuBar.setOutlineColor(visualRed);
-    menuBar.setOutlineThickness(5);
-    menuBar.setFillColor(invisible);
 
     sf::Image image;
     image.loadFromFile("assets/image.jpg");
@@ -58,6 +51,22 @@ void imageInterface() {
     display.setPosition(sf::Vector2f(0, 0));
     display.setScale(window.getSize().x / displayTexture.getSize().x, window.getSize().y / displayTexture.getSize().y);
 
+    sf::Text openFile("Open File", font, 20);
+    openFile.setFillColor(visualBlue);
+    openFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 1);
+
+    sf::Text closeFile("Close File", font, 20);
+    closeFile.setFillColor(visualBlue);
+    closeFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 2);
+
+    sf::Text encryptFile("Encrypt File", font, 20);
+    encryptFile.setFillColor(visualBlue);
+    encryptFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 3);
+
+    sf::Text decryptFile("Decrypt File", font, 20);
+    decryptFile.setFillColor(visualBlue);
+    decryptFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 4);
+
     bool isChat = false;
 
     float zoom = 1.0f;
@@ -66,19 +75,15 @@ void imageInterface() {
 
     sf::Vector2f imagePosition;
 
-    sf::Vector2f mouseOnImagePos;
-
     while (window.isOpen()) {
 
         displayTexture.update(image);
         display.setTexture(displayTexture);
 
-        mouseOnImagePos = { (sf::Mouse::getPosition(window).x - display.getGlobalBounds().left) / scale , (sf::Mouse::getPosition(window).y - display.getGlobalBounds().top) / scale };
-
         window.clear(background);
+
         sf::Event event;
-        if(window.pollEvent(event))
-        {
+        if(window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
@@ -86,18 +91,21 @@ void imageInterface() {
                 sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
                 scale = zoom * (event.size.width / (float)displayTexture.getSize().x);
                 window.setView(sf::View(visibleArea));
-                menuBar.setPosition(5, event.size.height / 2-100);
+
+                openFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 1);
+                closeFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 2);
+                encryptFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 3);
+                decryptFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 4);
             }
-            //if (event.type == sf::Event::MouseButtonPressed) {
-               // image.setPixel((UINT)mouseOnImagePos.x, (UINT)mouseOnImagePos.y, sf::Color::Black);
-            //}
             if (event.type == sf::Event::MouseWheelScrolled) {
-                if((zoom + 0.05 * event.mouseWheelScroll.delta) > 0.25 && (zoom + 0.05 * event.mouseWheelScroll.delta) < 2)
-                zoom += 0.05 * event.mouseWheelScroll.delta;
-            
+                if ((zoom + 0.05 * event.mouseWheelScroll.delta) > 0.1 && (zoom + 0.05 * event.mouseWheelScroll.delta) < 5) {
+                    if(display.getLocalBounds().height)
+                    zoom += 0.05 * event.mouseWheelScroll.delta;
+                }
+                
             }
         }
-        imagePosition = { (float)window.getSize().x / 2 - (float)displayTexture.getSize().x * display.getScale().x / 2, (float)window.getSize().y / 2 - (float)displayTexture.getSize().y * display.getScale().y / 2 };
+        imagePosition = { (float)window.getSize().x / 2 - (float)displayTexture.getSize().x * display.getScale().x / 2 + 150, (float)window.getSize().y / 2 - (float)displayTexture.getSize().y * display.getScale().y / 2 };
 
         scale = zoom * (window.getSize().x / (float)displayTexture.getSize().x);
 
@@ -108,7 +116,11 @@ void imageInterface() {
             window.draw(particles[x]);
 
         window.draw(display);
-        window.draw(menuBar);
+        window.draw(openFile);
+        window.draw(closeFile);
+        window.draw(encryptFile);
+        window.draw(decryptFile);
+
         window.display();
     }
 }
