@@ -51,6 +51,13 @@ void imageInterface() {
     display.setPosition(sf::Vector2f(0, 0));
     display.setScale(window.getSize().x / displayTexture.getSize().x, window.getSize().y / displayTexture.getSize().y);
 
+    sf::RectangleShape displayRect;
+    displayRect.setFillColor(darkness);
+    displayRect.setOutlineColor(visualYellow);
+    displayRect.setOutlineThickness(5);
+    displayRect.setSize(sf::Vector2f(window.getSize().x / 15 * 3, window.getSize().y / 20 * 9));
+    displayRect.setPosition(window.getSize().x / 30, window.getSize().y / 20);
+
     sf::Text openFile("Open File", font, 20);
     openFile.setFillColor(visualBlue);
     openFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 1);
@@ -92,6 +99,9 @@ void imageInterface() {
                 scale = zoom * (event.size.width / (float)displayTexture.getSize().x);
                 window.setView(sf::View(visibleArea));
 
+                displayRect.setSize(sf::Vector2f(window.getSize().x / 15 * 3, window.getSize().y / 20 * 9));
+                displayRect.setPosition(window.getSize().x / 30, window.getSize().y / 20);
+
                 openFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 1);
                 closeFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 2);
                 encryptFile.setPosition(window.getSize().x / 15, window.getSize().y / 10 * 3);
@@ -99,7 +109,6 @@ void imageInterface() {
             }
             if (event.type == sf::Event::MouseWheelScrolled) {
                 if ((zoom + 0.05 * event.mouseWheelScroll.delta) > 0.1 && (zoom + 0.05 * event.mouseWheelScroll.delta) < 5) {
-                    if(display.getLocalBounds().height)
                     zoom += 0.05 * event.mouseWheelScroll.delta;
                 }
                 
@@ -109,13 +118,15 @@ void imageInterface() {
 
         scale = zoom * (window.getSize().x / (float)displayTexture.getSize().x);
 
-        display.setPosition(imagePosition);
         display.setScale(scale, scale);
+        display.setPosition(imagePosition);
+       
 
         for (int x = 0; x < particleCount; x++)
             window.draw(particles[x]);
 
         window.draw(display);
+        window.draw(displayRect);
         window.draw(openFile);
         window.draw(closeFile);
         window.draw(encryptFile);
