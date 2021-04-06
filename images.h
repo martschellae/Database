@@ -40,12 +40,8 @@ void imageInterface() {
 
     sf::RenderWindow window(sf::VideoMode(1300, 700), "Image Manager");
 
-    sf::Image image;
-    image.loadFromFile("assets/image.jpg");
-
     sf::Texture displayTexture;
-    displayTexture.loadFromFile("assets/image.jpg");
-    displayTexture.update(image);
+    displayTexture.loadFromFile("assets/testImage.jpg");
 
     sf::Sprite display;
     display.setTexture(displayTexture);
@@ -83,9 +79,10 @@ void imageInterface() {
 
     sf::Vector2f imagePosition;
 
+    std::string fileName;
+
     while (window.isOpen()) {
 
-        displayTexture.update(image);
         display.setTexture(displayTexture);
 
         window.clear(background);
@@ -112,7 +109,25 @@ void imageInterface() {
                 if ((zoom + 0.05 * event.mouseWheelScroll.delta) > 0.1 && (zoom + 0.05 * event.mouseWheelScroll.delta) < 5) {
                     zoom += 0.05 * event.mouseWheelScroll.delta;
                 }
-                
+            }
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                if (openFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
+                    fileName = inputBox("Enter Filename(with .): ", "File:");
+                    displayTexture.loadFromFile(fileName);
+                }
+                if (closeFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
+                    displayTexture.loadFromFile("assets/testImage.jpg");
+                    
+                }
+                if (encryptFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
+                    fileName = inputBox("Enter Filename(with .):", "Name:");
+                    encryptPicture(fileName, createRandomKey(inputBox("Enter Password for Encryption", "Passw:")));
+                }
+                if (decryptFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
+                    fileName = inputBox("Enter Filename(with .):", "Name:");
+                    encryptPicture(fileName, createRandomKey(inputBox("Enter Password for Encryption", "Passw:")));
+                }
+
             }
         }
         imagePosition = { (float)window.getSize().x / 2 - (float)displayTexture.getSize().x * display.getScale().x / 2 + 150, (float)window.getSize().y / 2 - (float)displayTexture.getSize().y * display.getScale().y / 2 };

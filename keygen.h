@@ -10,8 +10,6 @@
 
 #include "configurations.h"
 
-
-
 char caesar(char x, int y) {
 	if (y < 0) {
 		y = 94 + y;
@@ -101,9 +99,9 @@ void encryptPicture(std::string path, std::string key) {
 	int c = 0;
 	for (int y = 0; y < old.getSize().y; y++) {
 		for (int x = 0; x < old.getSize().x; x++) {
-			UINT8 r = old.getPixel(x, y).r + keyword[c];
-			UINT8 g = old.getPixel(x, y).g + keyword[c];
-			UINT8 b = old.getPixel(x, y).b + keyword[c];
+			UINT8 r = old.getPixel(x, y).r + keyword[c] * 8;
+			UINT8 g = old.getPixel(x, y).g + keyword[c] * 8;
+			UINT8 b = old.getPixel(x, y).b + keyword[c] * 8;
 
 			new_Image.setPixel(x, y, {r, g, b});
 			c++;
@@ -127,9 +125,9 @@ void decryptPicture(std::string path, std::string key) {
 	int c = 0;
 	for (int y = 0; y < old.getSize().y; y++) {
 		for (int x = 0; x < old.getSize().x; x++) {
-			UINT8 r = old.getPixel(x, y).r - keyword[c];
-			UINT8 g = old.getPixel(x, y).g - keyword[c];
-			UINT8 b = old.getPixel(x, y).b - keyword[c];
+			UINT8 r = old.getPixel(x, y).r - keyword[c] * 8;
+			UINT8 g = old.getPixel(x, y).g - keyword[c] * 8;
+			UINT8 b = old.getPixel(x, y).b - keyword[c] * 8;
 
 			//if(r > 250 || r < 5)
 			//std::cout << "R: " << std::to_string(r) << "\tG: " << std::to_string(g) << "\tB: " << std::to_string(b) << "\n";
