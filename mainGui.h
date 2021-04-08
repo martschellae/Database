@@ -355,6 +355,13 @@ void openFileBrowser(std::string password) {
                             editorIndex++;
                         }
                 }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) && sf::Keyboard::isKeyPressed(sf::Keyboard::Tab)) {
+                    if (editorText[editorIndex].size() >= 5) {
+                        if (editorText[editorIndex].begin() <= editorText[editorIndex].end())
+                            editorText[editorIndex].replace(editorText[editorIndex].end() - 4, editorText[editorIndex].end(), "");
+                    }
+                    continue;
+                }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab)) {
                     editorText[editorIndex] += "\t";
                 }
@@ -368,7 +375,7 @@ void openFileBrowser(std::string password) {
                 if (event.key.code == 8) {
                     if (editorText[editorIndex].size() >= 1 && editorText[editorIndex][0] != '\0') {
                     if(editorText[editorIndex].begin() <= editorText[editorIndex].end())
-                        editorText[editorIndex].replace(editorText[editorIndex].end() - 1, editorText[editorIndex].end(), "\0");
+                        editorText[editorIndex].replace(editorText[editorIndex].end() - 1, editorText[editorIndex].end(), "");
                     }
                     else {
                         if (editorIndex > 1)
