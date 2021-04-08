@@ -94,7 +94,9 @@ void openFileBrowser(std::string password) {
     sf::RenderWindow window(sf::VideoMode(1300, 700), "File Browser");
     
     fEvent.registerEvent("Opened Window[1300:700]");
+
     Reload:
+
     sf::Text user("UserID: " + UserID, font, 25);
     user.setPosition(5, 5);
     user.setFillColor(visualYellow);
@@ -106,24 +108,20 @@ void openFileBrowser(std::string password) {
     files.setFillColor(visualYellow);
 
     sf::Text newButton("New File", font, 20);
-    newButton.setPosition(390, 565);
+    newButton.setPosition(390, window.getSize().y - 135);
     newButton.setFillColor(visualRed);
 
     sf::Text saveButton("Save File", font, 20);
-    saveButton.setPosition(390, 595);
+    saveButton.setPosition(390, window.getSize().y - 105);
     saveButton.setFillColor(visualRed);
     
     sf::Text clearButton("Clear File", font, 20);
-    clearButton.setPosition(390, 625);
+    clearButton.setPosition(390, window.getSize().y - 75);
     clearButton.setFillColor(visualRed);
 
     sf::Text standardButton("Apply Template", font, 20);
-    standardButton.setPosition(390, 655);
+    standardButton.setPosition(390, window.getSize().y - 45);
     standardButton.setFillColor(visualRed);
-
-    sf::Text imageButton("Apply Template", font, 20);
-    imageButton.setPosition(390, 655);
-    imageButton.setFillColor(visualRed);
 
     sf::RectangleShape upperLeft;
     upperLeft.setPosition(5, 5);
@@ -134,34 +132,34 @@ void openFileBrowser(std::string password) {
 
     sf::RectangleShape bottomLeft;
     bottomLeft.setPosition(5, 150);
-    bottomLeft.setSize(sf::Vector2f(370, 545));
+    bottomLeft.setSize(sf::Vector2f(370, window.getSize().y - 155));
     bottomLeft.setOutlineColor(darktheme);
     bottomLeft.setOutlineThickness(5);
-    bottomLeft.setFillColor(invisible);
+    bottomLeft.setFillColor(invisible); 
 
     sf::RectangleShape upperRight;
     upperRight.setPosition(380, 5);
-    upperRight.setSize(sf::Vector2f(915, 690));
+    upperRight.setSize(sf::Vector2f(window.getSize().x - 385, window.getSize().y - 10));
     upperRight.setOutlineColor(darktheme);
     upperRight.setOutlineThickness(5);
     upperRight.setFillColor(invisible);
 
     sf::RectangleShape middleRight;
-    middleRight.setPosition(380, 555);
-    middleRight.setSize(sf::Vector2f(915, 140));
+    middleRight.setPosition(380, window.getSize().y - 145);
+    middleRight.setSize(sf::Vector2f(window.getSize().x - 385, 140));
     middleRight.setOutlineColor(darktheme);
     middleRight.setOutlineThickness(5);
     middleRight.setFillColor(invisible);
 
     sf::RectangleShape bottomRight;
-    bottomRight.setPosition(605, 555);
-    bottomRight.setSize(sf::Vector2f(690, 140));
+    bottomRight.setPosition(605, window.getSize().y - 145);
+    bottomRight.setSize(sf::Vector2f(window.getSize().x - 610, 140));
     bottomRight.setOutlineColor(darktheme);
     bottomRight.setOutlineThickness(5);
     bottomRight.setFillColor(invisible);
 
     sf::RectangleShape bottomRight2;
-    bottomRight2.setPosition(1155, 555);
+    bottomRight2.setPosition(window.getSize().x - 145, window.getSize().y - 145);
     bottomRight2.setSize(sf::Vector2f(140, 140));
     bottomRight2.setOutlineColor(darktheme);
     bottomRight2.setOutlineThickness(5);
@@ -172,7 +170,7 @@ void openFileBrowser(std::string password) {
     sf::Sprite imgSprite;
     imgSprite.setTexture(imgTex);
     imgSprite.setPosition(window.getSize().x - 138, window.getSize().y - 138);
-    imgSprite.setColor(sf::Color(247, 17, 116)); //TODO
+    imgSprite.setColor(visualPink); //TODO
 
     std::vector<sf::Text> fileTexts;
     
@@ -208,8 +206,8 @@ void openFileBrowser(std::string password) {
 
     float caretX = 385;
 
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
+
         window.clear(background);
 
         if (shaking) {
@@ -245,8 +243,8 @@ void openFileBrowser(std::string password) {
                     goto SaveFile;
                 }
             }
-            if (event.type == sf::Event::Resized)
-            {
+            if (event.type == sf::Event::Resized) {
+
                 sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
                 upperRight.setSize(sf::Vector2f(event.size.width - 385, event.size.height - 10));
                 bottomLeft.setSize(sf::Vector2f(370, event.size.height - 155));
@@ -260,8 +258,7 @@ void openFileBrowser(std::string password) {
                 bottomRight.setPosition(605, event.size.height - 145);
                 bottomRight.setSize(sf::Vector2f(event.size.width - 610, 140));
                 bottomRight2.setPosition(event.size.width - 145, event.size.height - 145);
-                imgSprite.setPosition(window.getSize().x - 138, window.getSize().y - 138);
-
+                imgSprite.setPosition(event.size.width - 138, event.size.height - 138);
 
                 for (int u = 0; u < fileTexts.size(); u++) {
                     fileTexts[u].setPosition(10, ((datab.getFileCount() * -1 + 50) * u) + 150);
@@ -306,7 +303,6 @@ void openFileBrowser(std::string password) {
                     datab.addFileToDatabase(fName);
                     std::string tmp = "Created new File: " + fName;
                     currentFile = fName;
-                    fEvent.registerEvent(tmp);
                     goto Reload;
                 }
                 if (saveButton.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
@@ -366,7 +362,7 @@ void openFileBrowser(std::string password) {
                     sf::sleep(sf::seconds(1));
                     goto SaveFile;
                 }
-                }
+            }
             if (event.type == sf::Event::TextEntered)
             {
                 if (event.key.code == 8) {

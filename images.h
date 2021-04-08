@@ -42,7 +42,6 @@ void imageInterface() {
 
     sf::Texture displayTexture;
     displayTexture.loadFromFile("assets/testImage.jpg");
-
     sf::Sprite display;
     display.setTexture(displayTexture);
     display.setPosition(sf::Vector2f(0, 0));
@@ -83,8 +82,6 @@ void imageInterface() {
 
     while (window.isOpen()) {
 
-        display.setTexture(displayTexture);
-
         window.clear(background);
 
         sf::Event event;
@@ -116,13 +113,18 @@ void imageInterface() {
                     if (fileName.length() < 5) {
                         MessageBox(0, L"Invalid Filename", L"Error", MB_OK);
                     } else {
-                        if (!displayTexture.loadFromFile(fileName)) {
-                            MessageBox(0, L"File does not exist, check path", L"Error", MB_OK);
-                        }
+                    if (!displayTexture.loadFromFile(fileName)) {
+                        MessageBox(0, L"File does not exist, check path", L"Error", MB_OK);
+                    } else {
+                        sf::Texture newTexture;
+                        newTexture.loadFromFile(fileName);
+                        display.setTexture(newTexture);
+                    }
                     }
                 }
                 if (closeFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
                     displayTexture.loadFromFile("assets/testImage.jpg");
+                    display.setTexture(displayTexture);
                 }
                 if (encryptFile.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
                     fileName = inputBox("Enter Filename(with .):", "Name:");
@@ -151,7 +153,6 @@ void imageInterface() {
 
         display.setScale(scale, scale);
         display.setPosition(imagePosition);
-       
 
         for (int x = 0; x < particleCount; x++)
             window.draw(particles[x]);
