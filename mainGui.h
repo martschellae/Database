@@ -88,7 +88,7 @@ void openFileBrowser(std::string password) {
     fEvent.eventInterface.setCharacterSize(20);
     fEvent.eventInterface.setLineSpacing(1.05);
     fEvent.eventInterface.setPosition(610, 560);
-    fEvent.eventInterface.setStyle(sf::Text::Italic);
+    fEvent.eventInterface.setStyle(sf::Text::Bold);
     fEvent.registerEvent("Loaded Fonts, Colors");
 
     sf::RenderWindow window(sf::VideoMode(1300, 700), "File Browser");
