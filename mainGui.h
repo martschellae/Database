@@ -191,6 +191,10 @@ void openFileBrowser(std::string password) {
     editorContent.setPosition(390, 15);
     editorContent.setFillColor(visualBlue);
 
+    sf::Text contentHitbox("", font, 20);
+    contentHitbox.setPosition(390, 15);
+    contentHitbox.setFillColor(invisible);
+
     fEvent.eventInterface.setFillColor(visualRed);
 
     std::string currentFile;
@@ -201,14 +205,27 @@ void openFileBrowser(std::string password) {
     int shakeIndex = 20;
 
     sf::RectangleShape caret;
-    caret.setSize(sf::Vector2f(5, 25));
+    caret.setSize(sf::Vector2f(2.5, 25));
     caret.setFillColor(visualBlue);
 
-    float caretX = 385;
+    float caretAlpha = 0;
+
+    sf::Clock caretBlinkTimer;
+    sf::Time caretBlinkTime = sf::milliseconds(GetCaretBlinkTime());
 
     while (window.isOpen()) {
 
         window.clear(background);
+        if (caretBlinkTimer.getElapsedTime() >= caretBlinkTime) {
+            caretBlinkTimer.restart();
+            if (caretAlpha == 0) {
+                caretAlpha = 255;
+                goto Skip;
+            } else {
+                caretAlpha = 0;
+            }
+        }
+        Skip:
 
         if (shaking) {
             sf::View shaken;
@@ -395,7 +412,9 @@ void openFileBrowser(std::string password) {
                 }
             }
         }
-        caret.setPosition(sf::Vector2f(375, 24.1*editorIndex + 15));
+        contentHitbox.setString(editorText[editorIndex]);//TODO
+        caret.setPosition(sf::Vector2f(contentHitbox.getGlobalBounds().left + contentHitbox.getGlobalBounds().width, 24.1*editorIndex + 15));
+        caret.setFillColor(sf::Color(visualBlue.r, visualBlue.g, visualBlue.b, caretAlpha));
 
         mPosition = {(sf::Mouse::getPosition().x / 40) - 30.0f, (sf::Mouse::getPosition().y / 40) - 30.0f};
 
