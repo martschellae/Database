@@ -360,6 +360,7 @@ void openFileBrowser(std::string password) {
                         if (editorText[editorIndex].begin() <= editorText[editorIndex].end())
                             editorText[editorIndex].replace(editorText[editorIndex].end() - 4, editorText[editorIndex].end(), "");
                     }
+                    //TODO
                     continue;
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab)) {
