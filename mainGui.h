@@ -30,11 +30,11 @@ public:
         Line3 = Line4;
         Line4 = Line5;
         Line5 = Event;
-        std::string tmp = "--> " + Line1 + "\n" +
-                          "--> " + Line2 + "\n" +
-                          "--> " + Line3 + "\n" +
-                          "--> " + Line4 + "\n" +
-                          "--> " + Line5 + "\n";
+        std::string tmp = Line1 + "\n" +
+                          Line2 + "\n" +
+                          Line3 + "\n" +
+                          Line4 + "\n" +
+                          Line5 + "\n";
         eventInterface.setString(tmp);
     }
 };
@@ -89,11 +89,8 @@ void openFileBrowser(std::string password) {
     fEvent.eventInterface.setLineSpacing(1.05);
     fEvent.eventInterface.setPosition(610, 560);
     fEvent.eventInterface.setStyle(sf::Text::Bold);
-    fEvent.registerEvent("Loaded Fonts, Colors");
 
     sf::RenderWindow window(sf::VideoMode(1300, 700), "File Browser");
-    
-    fEvent.registerEvent("Opened Window[1300:700]");
 
     Reload:
 
