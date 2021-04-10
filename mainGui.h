@@ -90,6 +90,12 @@ void openFileBrowser(std::string password) {
     fEvent.eventInterface.setPosition(610, 560);
     fEvent.eventInterface.setStyle(sf::Text::Bold);
 
+    sf::Cursor normal;
+    normal.loadFromSystem(sf::Cursor::Arrow);
+
+    sf::Cursor hand;
+    hand.loadFromSystem(sf::Cursor::Hand);
+
     sf::RenderWindow window(sf::VideoMode(1300, 700), "File Browser");
 
     Reload:
@@ -241,7 +247,7 @@ void openFileBrowser(std::string password) {
                 caretAlpha = 0;
             }
         }
-        Skip:
+        
 
         if (shaking) {
             sf::View shaken;
@@ -412,9 +418,13 @@ void openFileBrowser(std::string password) {
                     goto Reload;
                 }
                 newButton.setStyle(sf::Text::Bold);
+                window.setMouseCursor(hand);
+                goto Skip;
             }
-            else newButton.setStyle(sf::Text::Regular);
-
+            else {
+                newButton.setStyle(sf::Text::Regular);
+                window.setMouseCursor(normal);
+            }
             if (saveButton.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 SaveFile:
@@ -424,9 +434,12 @@ void openFileBrowser(std::string password) {
                     fEvent.registerEvent("Saved File");
                 }
                 saveButton.setStyle(sf::Text::Bold);
+                window.setMouseCursor(hand);
+                goto Skip;
+            } else {
+                saveButton.setStyle(sf::Text::Regular);
+                window.setMouseCursor(normal);
             }
-            else saveButton.setStyle(sf::Text::Regular);
-
             if (clearButton.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     for (int c = 0; c < editorText.size(); c++) {
@@ -437,8 +450,12 @@ void openFileBrowser(std::string password) {
                     fEvent.registerEvent("Cleared File");
                 }
                 clearButton.setStyle(sf::Text::Bold);
+                window.setMouseCursor(hand);
+                goto Skip;
+            } else {
+                clearButton.setStyle(sf::Text::Regular);
+                window.setMouseCursor(normal);
             }
-            else clearButton.setStyle(sf::Text::Regular);
 
             if (standardButton.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -447,19 +464,29 @@ void openFileBrowser(std::string password) {
                     fEvent.registerEvent("Applied Template");
                 }
                 standardButton.setStyle(sf::Text::Bold);
+                window.setMouseCursor(hand);
+                goto Skip;
+            } else {
+                standardButton.setStyle(sf::Text::Regular);
+                window.setMouseCursor(normal);
             }
-            else standardButton.setStyle(sf::Text::Regular);
 
             if (netSprite.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
                     networkInterface();
-            }
+                window.setMouseCursor(hand);
+                goto Skip;
+            } else window.setMouseCursor(normal);
 
             if (imgSprite.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
                     imageInterface();
-            }
+                window.setMouseCursor(hand);
+                goto Skip;
+            } else window.setMouseCursor(normal);
         }
+
+    Skip:
 
         contentHitbox.setString(editorText[editorIndex]);//TODO
         caret.setPosition(sf::Vector2f(contentHitbox.getGlobalBounds().left + contentHitbox.getGlobalBounds().width, 24.1*editorIndex + 15));
