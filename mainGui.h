@@ -317,6 +317,12 @@ void openFileBrowser(std::string password) {
                 }
                 if (newButton.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
                     std::string fName = inputBox("Enter Filename: ", "Name:");
+                    for (int j = 0; j < fName.size(); j++) {
+                        if (fName[j] == '\\' || fName[j] == '?' || fName[j] == '=' || fName[j] == '/' || fName[j] == ':' || fName[j] == '*' || fName[j] == '|' || fName[j] == '\"') {
+                            MessageBox(0, L"File may not contain any of these characters:\n / \\ : ? * | \" ", L"Illegal Character", MB_OK);
+                            goto Reload;
+                        }
+                    }
                     datab.addFileToDatabase(fName);
                     std::string tmp = "Created new File: " + fName;
                     currentFile = fName;
