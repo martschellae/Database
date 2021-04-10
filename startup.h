@@ -36,6 +36,9 @@ std::string login() {
 
     hideConsole();
 
+    Beep(1000, 100);
+    Beep(1000, 100);
+
     std::vector<sf::CircleShape> particles;
     std::vector<sf::Vector2f> particlePos;
     int particleCount = 100;

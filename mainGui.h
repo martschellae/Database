@@ -31,10 +31,10 @@ public:
         Line4 = Line5;
         Line5 = Event;
         std::string tmp = "--> " + Line1 + "\n" +
-                          " --> " + Line2 + "\n" +
-                          "  --> " + Line3 + "\n" +
-                          "   --> " + Line4 + "\n" +
-                          "    --> " + Line5 + "\n";
+                          "--> " + Line2 + "\n" +
+                          "--> " + Line3 + "\n" +
+                          "--> " + Line4 + "\n" +
+                          "--> " + Line5 + "\n";
         eventInterface.setString(tmp);
     }
 };
