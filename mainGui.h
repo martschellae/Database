@@ -97,15 +97,18 @@ void openFileBrowser(std::string password) {
 
     Reload:
 
-    sf::Text user("UserID: " + UserID, font, 25);
+    sf::Text user("userID: " + UserID, font, 25);
     user.setPosition(5, 5);
     user.setFillColor(visualYellow);
-    sf::Text pass("Password: " + PassID, font, 25);
+    user.setStyle(sf::Text::Bold);
+    sf::Text pass("password: " + PassID, font, 25);
     pass.setPosition(5, 45);
     pass.setFillColor(visualYellow);
-    sf::Text files("Files: " + std::to_string(datab.getFileCount()) + "\t Network", font, 25);
+    pass.setStyle(sf::Text::Bold);
+    sf::Text files("files: " + std::to_string(datab.getFileCount()), font, 25);
     files.setPosition(5, 85);
     files.setFillColor(visualYellow);
+    files.setStyle(sf::Text::Bold);
 
     sf::Text newButton("New File", font, 20);
     newButton.setPosition(390, window.getSize().y - 135);
@@ -171,6 +174,20 @@ void openFileBrowser(std::string password) {
     imgSprite.setTexture(imgTex);
     imgSprite.setPosition(window.getSize().x - 138, window.getSize().y - 138);
     imgSprite.setColor(visualPink); //TODO
+
+    sf::Texture netTex;
+    netTex.loadFromFile(SERV);
+    sf::Sprite netSprite;
+    netSprite.setTexture(netTex);
+    netSprite.setPosition(window.getSize().x - 74, window.getSize().y - 138);
+    netSprite.setColor(visualPink); //TODO
+
+    sf::Texture sndTex;
+    sndTex.loadFromFile(SOND);
+    sf::Sprite sndSprite;
+    sndSprite.setTexture(sndTex);
+    sndSprite.setPosition(window.getSize().x - 138, window.getSize().y - 74);
+    sndSprite.setColor(visualPink);
 
     std::vector<sf::Text> fileTexts;
     
@@ -276,6 +293,8 @@ void openFileBrowser(std::string password) {
                 bottomRight.setSize(sf::Vector2f(event.size.width - 610, 140));
                 bottomRight2.setPosition(event.size.width - 145, event.size.height - 145);
                 imgSprite.setPosition(event.size.width - 138, event.size.height - 138);
+                netSprite.setPosition(window.getSize().x - 74, window.getSize().y - 138);
+                sndSprite.setPosition(window.getSize().x - 138, window.getSize().y - 74);
 
                 for (int u = 0; u < fileTexts.size(); u++) {
                     fileTexts[u].setPosition(10, ((datab.getFileCount() * -1 + 50) * u) + 150);
@@ -348,7 +367,7 @@ void openFileBrowser(std::string password) {
                     editorIndex = 0;
                     fEvent.registerEvent("Applied Template");
                 }
-                if (files.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
+                if (netSprite.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
                     networkInterface();
                 }
                 if (imgSprite.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
@@ -392,6 +411,7 @@ void openFileBrowser(std::string password) {
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
                     sf::sleep(sf::seconds(1));
+                    //TODO
                     goto SaveFile;
                 }
             }
@@ -457,6 +477,8 @@ void openFileBrowser(std::string password) {
         window.draw(clearButton);
         window.draw(standardButton);
         window.draw(imgSprite);
+        window.draw(netSprite);
+        window.draw(sndSprite);
         window.draw(fEvent.eventInterface);
         window.draw(editorContent);
         window.draw(caret);
