@@ -320,6 +320,7 @@ void openFileBrowser(std::string password) {
                     datab.addFileToDatabase(fName);
                     std::string tmp = "Created new File: " + fName;
                     currentFile = fName;
+                    fEvent.registerEvent(tmp);
                     goto Reload;
                 }
                 if (saveButton.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
