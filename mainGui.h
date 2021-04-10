@@ -227,6 +227,8 @@ void openFileBrowser(std::string password) {
     sf::Clock caretBlinkTimer;
     sf::Time caretBlinkTime = sf::milliseconds(GetCaretBlinkTime());
 
+    sf::Clock savingTimer;
+
     while (window.isOpen()) {
 
         window.clear(background);
@@ -264,14 +266,13 @@ void openFileBrowser(std::string password) {
         }
         
         sf::Event event;
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)) {
+
             if (event.type == sf::Event::Closed) {
-                if (MessageBoxA(0, "Are your sure you want to exit? Your files may not be saved", "Unsaved Changes", MB_YESNOCANCEL) == 6) {
+                if (savingTimer.getElapsedTime() < sf::seconds(30)) {
                     window.close();
-                }
-                else {
-                    goto SaveFile;
+                }else if (MessageBoxA(0, "Are your sure you want to exit? Your files may not be saved", "Unsaved Changes", MB_YESNOCANCEL) == 6) {
+                    window.close();
                 }
             }
             if (event.type == sf::Event::Resized) {
@@ -309,7 +310,6 @@ void openFileBrowser(std::string password) {
                             currentFile = fileTexts[g].getString();
                             std::string tmp = "Opened File: " + fileTexts[g].getString();
                             fEvent.registerEvent(tmp);
-
                             editorIndex = 0;
                         }
                     }
@@ -329,45 +329,6 @@ void openFileBrowser(std::string password) {
                             }
                         }
                     }
-                }
-                if (newButton.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
-                    std::string fName = inputBox("Enter Filename: ", "Name:");
-                    for (int j = 0; j < fName.size(); j++) {
-                        if (fName[j] == '\\' || fName[j] == '?' || fName[j] == '=' || fName[j] == '/' || fName[j] == ':' || fName[j] == '*' || fName[j] == '|' || fName[j] == '\"') {
-                            MessageBox(0, L"File may not contain any of these characters:\n / \\ : ? * | \" ", L"Illegal Character", MB_OK);
-                            goto Reload;
-                        }
-                    }
-                    datab.addFileToDatabase(fName);
-                    std::string tmp = "Created new File: " + fName;
-                    currentFile = fName;
-                    fEvent.registerEvent(tmp);
-                    goto Reload;
-                }
-                if (saveButton.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
-                    SaveFile:
-                    datab.setFileContent(editorText);
-                    datab.saveFileInDatabase(currentFile);
-                    fEvent.registerEvent("Saved File");
-                }
-                if (clearButton.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
-                    for (int c = 0; c < editorText.size(); c++) {
-                        editorText[c] = "";
-                    }
-                    shaking = true;
-                    editorIndex = 0;
-                    fEvent.registerEvent("Cleared File");
-                }
-                if (standardButton.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
-                    editorText = datab.applyTemplate();
-                    editorIndex = 0;
-                    fEvent.registerEvent("Applied Template");
-                }
-                if (netSprite.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
-                    networkInterface();
-                }
-                if (imgSprite.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
-                    imageInterface();
                 }
             }
             if (event.type == sf::Event::KeyPressed) {
@@ -411,8 +372,7 @@ void openFileBrowser(std::string password) {
                     goto SaveFile;
                 }
             }
-            if (event.type == sf::Event::TextEntered)
-            {
+            if (event.type == sf::Event::TextEntered) {
                 if (event.key.code == 8) {
                     if (editorText[editorIndex].size() >= 1 && editorText[editorIndex][0] != '\0') {
                     if(editorText[editorIndex].begin() <= editorText[editorIndex].end())
@@ -434,7 +394,76 @@ void openFileBrowser(std::string password) {
                     }
                 }
             }
+
+            if (newButton.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    std::string fName = inputBox("Enter Filename: ", "Name:");
+                    if (fName.size() < 3) {
+                        MessageBox(0, L"No Filename given.", L"Illegal Filename", MB_OK);
+                        goto Reload;
+                    }
+                    for (int j = 0; j < fName.size(); j++) {
+                        if (fName[j] == '\\' || fName[j] == '?' || fName[j] == '=' || fName[j] == '/' || fName[j] == ':' || fName[j] == '*' || fName[j] == '|' || fName[j] == '\"') {
+                            MessageBox(0, L"File may not contain any of these characters:\n / \\ : ? * | \" ", L"Illegal Character", MB_OK);
+                            goto Reload;
+                        }
+                    }
+                    datab.addFileToDatabase(fName);
+                    std::string tmp = "Created new File: " + fName;
+                    currentFile = fName;
+                    fEvent.registerEvent(tmp);
+                    goto Reload;
+                }
+                newButton.setStyle(sf::Text::Bold);
+            }
+            else newButton.setStyle(sf::Text::Regular);
+
+            if (saveButton.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                SaveFile:
+                    savingTimer.restart();
+                    datab.setFileContent(editorText);
+                    datab.saveFileInDatabase(currentFile);
+                    fEvent.registerEvent("Saved File");
+                }
+                saveButton.setStyle(sf::Text::Bold);
+            }
+            else saveButton.setStyle(sf::Text::Regular);
+
+            if (clearButton.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    for (int c = 0; c < editorText.size(); c++) {
+                        editorText[c] = "";
+                    }
+                    shaking = true;
+                    editorIndex = 0;
+                    fEvent.registerEvent("Cleared File");
+                }
+                clearButton.setStyle(sf::Text::Bold);
+            }
+            else clearButton.setStyle(sf::Text::Regular);
+
+            if (standardButton.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    editorText = datab.applyTemplate();
+                    editorIndex = 0;
+                    fEvent.registerEvent("Applied Template");
+                }
+                standardButton.setStyle(sf::Text::Bold);
+            }
+            else standardButton.setStyle(sf::Text::Regular);
+
+            if (netSprite.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                    networkInterface();
+            }
+
+            if (imgSprite.getGlobalBounds().contains((float)sf::Mouse::getPosition(window).x, (float)sf::Mouse::getPosition(window).y)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                    imageInterface();
+            }
         }
+
         contentHitbox.setString(editorText[editorIndex]);//TODO
         caret.setPosition(sf::Vector2f(contentHitbox.getGlobalBounds().left + contentHitbox.getGlobalBounds().width, 24.1*editorIndex + 15));
         caret.setFillColor(sf::Color(visualBlue.r, visualBlue.g, visualBlue.b, caretAlpha));
