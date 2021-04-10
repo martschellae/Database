@@ -314,8 +314,7 @@ void openFileBrowser(std::string password) {
                         }
                     }
                     else {
-                        if (fileTexts[g].getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
-                            //datab.deleteFile(STDD + fileTexts[g].getString() + DATA_TYPE_BASEFILE);
+                        if (fileTexts[g].getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y) && fileTexts[g].getStyle() != sf::Text::StrikeThrough) {
                             DeleteFile:
                             if (MessageBoxA(0, "Are your sure you want to delete this file?", "Delete File?", MB_YESNOCANCEL) == 6) {
                             std::string tmp = "Deleted File: " + fileTexts[g].getString();
