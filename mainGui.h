@@ -170,21 +170,21 @@ void openFileBrowser(std::string password) {
     sf::Sprite imgSprite;
     imgSprite.setTexture(imgTex);
     imgSprite.setPosition(window.getSize().x - 138, window.getSize().y - 138);
-    imgSprite.setColor(visualPink); //TODO
+    imgSprite.setColor(visualRed);
 
     sf::Texture netTex;
     netTex.loadFromFile(SERV);
     sf::Sprite netSprite;
     netSprite.setTexture(netTex);
     netSprite.setPosition(window.getSize().x - 74, window.getSize().y - 138);
-    netSprite.setColor(visualPink); //TODO
+    netSprite.setColor(visualRed);
 
     sf::Texture sndTex;
     sndTex.loadFromFile(SOND);
     sf::Sprite sndSprite;
     sndSprite.setTexture(sndTex);
     sndSprite.setPosition(window.getSize().x - 138, window.getSize().y - 74);
-    sndSprite.setColor(visualPink);
+    sndSprite.setColor(visualRed);
 
     std::vector<sf::Text> fileTexts;
     
@@ -300,9 +300,8 @@ void openFileBrowser(std::string password) {
 
                 window.setView(sf::View(visibleArea));
             }
-            if (event.type == sf::Event::MouseButtonPressed) {
-
-                for (int g = 0; g < fileTexts.size(); g++) {
+            if (event.type == sf::Event::MouseButtonPressed)
+                for (int g = 0; g < fileTexts.size(); g++)
                     if (event.mouseButton.button == sf::Mouse::Left) {
                         if (fileTexts[g].getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
 
@@ -312,8 +311,7 @@ void openFileBrowser(std::string password) {
                             fEvent.registerEvent(tmp);
                             editorIndex = 0;
                         }
-                    }
-                    else {
+                    } else {
                         if (fileTexts[g].getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y) && fileTexts[g].getStyle() != sf::Text::StrikeThrough) {
                             DeleteFile:
                             if (MessageBoxA(0, "Are your sure you want to delete this file?", "Delete File?", MB_YESNOCANCEL) == 6) {
@@ -329,8 +327,7 @@ void openFileBrowser(std::string password) {
                             }
                         }
                     }
-                }
-            }
+
             if (event.type == sf::Event::KeyPressed) {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
                         if (editorIndex + 1 >= editorText.size()) {
