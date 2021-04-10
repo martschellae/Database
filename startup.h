@@ -62,16 +62,16 @@ std::string login() {
         error("Font not found. Font must be located under \"assets/fonts/font.ttf\"");
     }
 
-    sf::RenderWindow window(sf::VideoMode(700, 150), "Login", sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(700, 150), "login", sf::Style::Titlebar | sf::Style::Close);
 
-    sf::Text user("Username:", font, 30);
+    sf::Text user("username:", font, 30);
     user.setPosition(10, 20);
     user.setFillColor(background);
-    user.setStyle(sf::Text::Italic);
-    sf::Text pass("Password:", font, 30);
+    user.setStyle(sf::Text::Bold);
+    sf::Text pass("password:", font, 30);
     pass.setPosition(10, 80);
     pass.setFillColor(background);
-    pass.setStyle(sf::Text::Italic);
+    pass.setStyle(sf::Text::Bold);
 
     bool userTarget = true;
     bool passTarget = false;
