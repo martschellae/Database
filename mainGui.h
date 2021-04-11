@@ -39,24 +39,21 @@ public:
     }
 };
 
+unsigned GetNumberOfDigits(unsigned i)
+{
+    return i > 0 ? (int)log10((double)i) + 1 : 1;
+}
+
 void openFileBrowser(std::string password) {
 
     hideConsole();
-    std::string UserID;
-    std::string PassID;
-    std::ifstream input(SAVE);
-    if (!input) {
-        return;
-    }
-    std::getline(input, UserID);
-    std::getline(input, PassID);
 
     Database datab;
     datab.setPassword(password);
     datab.openDataBase();
     datab.sortDatabase();
     datab.updateDataBase();
-    
+
     std::vector<sf::CircleShape> particles;
     std::vector<sf::Vector2f> particlePos;
     int particleCount = 2300;
@@ -72,11 +69,11 @@ void openFileBrowser(std::string password) {
         temp.setPosition(particlePos[x]);
         particles.push_back(temp);
     }
-    
+
     sf::Vector2f mPosition(0, 0);
 
     sf::Font font;
-    
+
     if (!font.loadFromFile(FONT)) {
         showConsole();
         error("Font not found. Font must be located under \"assets/fonts/font.ttf\"");
@@ -98,18 +95,10 @@ void openFileBrowser(std::string password) {
 
     sf::RenderWindow window(sf::VideoMode(1300, 700), "File Browser");
 
-    Reload:
+Reload:
 
-    sf::Text user("userID: " + UserID, font, 25);
-    user.setPosition(5, 5);
-    user.setFillColor(visualYellow);
-    user.setStyle(sf::Text::Bold);
-    sf::Text pass("password: " + PassID, font, 25);
-    pass.setPosition(5, 45);
-    pass.setFillColor(visualYellow);
-    pass.setStyle(sf::Text::Bold);
-    sf::Text files("files: " + std::to_string(datab.getFileCount()), font, 25);
-    files.setPosition(5, 85);
+    sf::Text files("files: " + std::to_string(datab.getFileCount()) + "\nJa, hier ist leere,\nstill w.i.p.", font, 25);
+    files.setPosition(5, 15);
     files.setFillColor(visualYellow);
     files.setStyle(sf::Text::Bold);
 
@@ -208,12 +197,19 @@ void openFileBrowser(std::string password) {
     unsigned int editorIndex = 0;
 
     sf::Text editorContent("Content", font, 20);
-    editorContent.setPosition(390, 15);
+    editorContent.setPosition(450, 15);
     editorContent.setFillColor(visualBlue);
 
     sf::Text contentHitbox("", font, 20);
-    contentHitbox.setPosition(390, 15);
+    contentHitbox.setPosition(450, 15);
     contentHitbox.setFillColor(invisible);
+
+    sf::Text editorLines("0\n1\n2\n3", font, 20);
+    editorLines.setPosition(390, 15);
+    editorLines.setFillColor(visualGreen);
+    int visibleLines = 20;
+    int lineOffset = 0;
+    std::string linesString;
 
     fEvent.eventInterface.setFillColor(visualRed);
 
@@ -247,7 +243,6 @@ void openFileBrowser(std::string password) {
                 caretAlpha = 0;
             }
         }
-        
 
         if (shaking) {
             sf::View shaken;
@@ -270,7 +265,15 @@ void openFileBrowser(std::string password) {
             }
             window.setView(shaken);
         }
-        
+
+        visibleLines = int((window.getSize().y - 155) / font.getLineSpacing(20));
+        linesString = "\0";
+
+        for (int l = 1; l <= visibleLines; l++) {
+            linesString += std::to_string(lineOffset + l) + "\n";
+        }
+        editorLines.setString(linesString);
+
         sf::Event event;
         while (window.pollEvent(event)) {
 
@@ -280,6 +283,10 @@ void openFileBrowser(std::string password) {
                 }else if (MessageBoxA(0, "Are your sure you want to exit? Your files may not be saved", "Unsaved Changes", MB_YESNOCANCEL) == 6) {
                     window.close();
                 }
+            }
+            if (event.type == sf::Event::MouseWheelScrolled) {
+                lineOffset += event.mouseWheelScroll.delta * -2;
+                if (lineOffset <= 0) lineOffset = 0;
             }
             if (event.type == sf::Event::Resized) {
 
@@ -336,27 +343,30 @@ void openFileBrowser(std::string password) {
 
             if (event.type == sf::Event::KeyPressed) {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-                        if (editorIndex + 1 >= editorText.size()) {
-                            editorText.push_back("");
-                            editorIndex++;
-                        }
-                        else {
-                            editorIndex++;
-                        }
+                    if (editorIndex + 1 >= editorText.size()) {
+                        editorText.push_back("");
+                        editorIndex++;
+                    }
+                    else {
+                        editorIndex++;
+                    }
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                     if (!editorIndex <= 0) {
                         editorIndex--;
                     }
+                    lineOffset -= 1;
+                    if (lineOffset <= 0) lineOffset = 0;
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                        if (editorIndex + 1 >= editorText.size()) {
-                            editorText.push_back("");
-                            editorIndex++;
-                        }
-                        else {
-                            editorIndex++;
-                        }
+                    if (editorIndex + 1 >= editorText.size()) {
+                        editorText.push_back("");
+                        editorIndex++;
+                    }
+                    else {
+                        editorIndex++;
+                    }
+                    lineOffset++;
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) && sf::Keyboard::isKeyPressed(sf::Keyboard::Tab)) {
                     if (editorText[editorIndex].size() >= 5) {
@@ -489,7 +499,7 @@ void openFileBrowser(std::string password) {
     Skip:
 
         contentHitbox.setString(editorText[editorIndex]);//TODO
-        caret.setPosition(sf::Vector2f(contentHitbox.getGlobalBounds().left + contentHitbox.getGlobalBounds().width, 24.1*editorIndex + 15));
+        caret.setPosition(sf::Vector2f(contentHitbox.getGlobalBounds().left + contentHitbox.getGlobalBounds().width, font.getLineSpacing(20)*(editorIndex - lineOffset) + 15));
         caret.setFillColor(sf::Color(visualBlue.r, visualBlue.g, visualBlue.b, caretAlpha));
 
         mPosition = {(sf::Mouse::getPosition().x / 40) - 30.0f, (sf::Mouse::getPosition().y / 40) - 30.0f};
@@ -499,12 +509,13 @@ void openFileBrowser(std::string password) {
         }
         
         std::string temp = "";
-        for (int p = 0; p < editorText.size(); p++) {
-            temp += editorText[p];
+        for (int p = 0; p < visibleLines; p++) {
+            if ((p + lineOffset) < editorText.size()) {
+            temp += editorText[p + lineOffset];
             temp += "\n";
+            }
         }
         editorContent.setString(temp);
-
 
         for (int x = 0; x < particleCount; x++) {
             window.draw(particles[x]);
@@ -515,8 +526,6 @@ void openFileBrowser(std::string password) {
         window.draw(middleRight);
         window.draw(bottomRight);
         window.draw(bottomRight2);
-        window.draw(user);
-        window.draw(pass);
         window.draw(files);
         for (int f = 0; f < fileTexts.size(); f++) {
             window.draw(fileTexts[f]);
@@ -529,8 +538,10 @@ void openFileBrowser(std::string password) {
         window.draw(netSprite);
         window.draw(sndSprite);
         window.draw(fEvent.eventInterface);
+        window.draw(editorLines);
         window.draw(editorContent);
-        window.draw(caret);
+        
+        if(caret.getPosition().y <= (window.getSize().y - 155))window.draw(caret);
         window.display();
     }
 }
