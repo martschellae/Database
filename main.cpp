@@ -13,6 +13,7 @@
 #include "templates.h"
 #include "captcha.h"
 #include "networking.h"
+#include "error.h"
 
 int main()
 {

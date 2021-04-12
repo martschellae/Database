@@ -155,6 +155,10 @@ extern const std::vector<std::string> EXPROFILE_LIST =
 "Hobbys: ",
 "Notizen: " };
 
+extern const std::string error_message_database_corrupted = "Database cannot be read. Check if all data is saved as \".xyz\" files.\nAlso check the \"path.database\" file.\nThis file can be found in the \"assets/\" folder.";
+extern const std::string error_message_files_missing = "Specific file is missing, check all textures, fonts and template.\nIf this doesnt work, try reinstalling.";
+extern const std::string error_message_bad_config_format = "Bad Format:\nConfig file was modified into a wrong format. \nLook at the \"original_colors\" file for format help.\nMake sure there are no random whitespaces or newlines.";
+
 void readConfigFile() {
 
 	std::vector<std::string> file;
@@ -173,13 +177,8 @@ void readConfigFile() {
 		size++;
 	}
 	if (size != 9) {
-		ShowWindow(GetConsoleWindow(), SW_SHOW);
-		std::cout << size;
-		std::cerr << "Fatal Error: Bad format. Check config file or try resetting the file.\n";
-		system("pause");
-		exit(-1);
+		throwError(error_bad_config_format);
 	}
-
 	visualBlue = string_to_color(file[2]);
 	visualYellow = string_to_color(file[4]);
 	visualGreen = string_to_color(file[6]);

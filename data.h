@@ -46,6 +46,9 @@ public:
 	void setPassword(std::string pass) {
 		password = pass;
 	}
+	std::string getPassword() {
+		return password;
+	}
 	bool exists(std::string path) {
 		for (int g = 0; g < dataBasePaths.size(); g++) {
 			if (dataBasePaths[g] == path)return true;
@@ -64,7 +67,7 @@ public:
 		if (dataBaseFile.good()) {
 			while (!dataBaseFile.eof()) {
 				std::getline(dataBaseFile, line);
-				if (line != "" && line != "\0" && line != "\n")
+				if (line != "" && line != "\0" && line != "\n" && line.length() > 1)
 					dataBasePaths.push_back(line);
 			}
 		}else {
@@ -96,12 +99,15 @@ public:
 		dataBasePaths.erase(place);
 		int x = std::remove(formatString(path).c_str());
 		updateDataBase();
+		if (exists(path)) {
+			return -1;
+		}
 		return x;
 	}
 	std::vector<std::string> openFileFromDatabase(std::string path) {
-
 		std::string rawpath = path;
 		path = formatString(path);
+		workFileContent.erase(workFileContent.begin(), workFileContent.end());
 		workFileContent.resize(0);
 		workFileContent.shrink_to_fit();
 		workFile.open(path, std::ios_base::in | std::ios_base::out);
@@ -114,13 +120,11 @@ public:
 					workFileContent.push_back(line);	
 				}
 			}
-			workFileContent.push_back("");
 			workFile.close();
 		}else {
 			workFile.open(path, std::ios_base::out | std::ios_base::trunc);
 			workFile.close();
-			openFileFromDatabase(rawpath);
-
+			workFileContent.push_back("");
 		}
 		return workFileContent;
 	}

@@ -331,7 +331,7 @@ Reload:
                             if (datab.removeFileFromDatabase(fileTexts[g].getString()) == 0) {
                                 tmp = "Deleted File: " + fileTexts[g].getString();
                             } else {
-                                tmp = "Error deleting file";
+                                tmp = "Error deleting \"" + fileTexts[g].getString() + "\"";
                             }
                             shaking = true;
                             fEvent.registerEvent(tmp);

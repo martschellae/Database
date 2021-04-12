@@ -16,9 +16,7 @@ int check(std::string username, std::string password) {
     std::string comparePass;
     std::ifstream input(SAVE);
     if (!input) {
-        showConsole();
-        error("Hash File not found. Hash file must be located under \"assets/dependencies/key.hash\"");
-        hideConsole();
+        throwError(error_database_corrupted);
     }
     std::getline(input, compareUser);
     std::getline(input, comparePass);
