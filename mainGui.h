@@ -316,8 +316,7 @@ Reload:
             if (event.type == sf::Event::MouseButtonPressed)
                 for (int g = 0; g < fileTexts.size(); g++)
                     if (event.mouseButton.button == sf::Mouse::Left) {
-                        if (fileTexts[g].getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
-
+                        if (fileTexts[g].getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y) && fileTexts[g].getStyle() != sf::Text::StrikeThrough) {
                             editorText = datab.openFileFromDatabase(fileTexts[g].getString());
                             currentFile = fileTexts[g].getString();
                             std::string tmp = "Opened File: " + fileTexts[g].getString();
@@ -328,8 +327,12 @@ Reload:
                         if (fileTexts[g].getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y) && fileTexts[g].getStyle() != sf::Text::StrikeThrough) {
                             DeleteFile:
                             if (MessageBoxA(0, "Are your sure you want to delete this file?", "Delete File?", MB_YESNOCANCEL) == 6) {
-                            std::string tmp = "Deleted File: " + fileTexts[g].getString();
-                            datab.removeFileFromDatabase(fileTexts[g].getString());
+                                std::string tmp; 
+                            if (datab.removeFileFromDatabase(fileTexts[g].getString()) == 0) {
+                                tmp = "Deleted File: " + fileTexts[g].getString();
+                            } else {
+                                tmp = "Error deleting file";
+                            }
                             shaking = true;
                             fEvent.registerEvent(tmp);
                             fileTexts[g].setStyle(fileTexts[g].StrikeThrough);
@@ -338,6 +341,7 @@ Reload:
                                 std::string tmp = "File " + fileTexts[g].getString() + " was not deleted";
                                 fEvent.registerEvent(tmp);
                             }
+                            datab.updateDataBase();
                         }
                     }
 

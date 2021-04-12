@@ -74,7 +74,7 @@ public:
 		return dataBasePaths;
 	}
 	void updateDataBase() {
-		dataBaseFile.open(BASE, std::ios_base::in | std::ios_base::out | std::ios_base::trunc);
+		dataBaseFile.open(BASE, std::ios_base::out | std::ios_base::trunc);
 		for (int g = 0; g < dataBasePaths.size(); g++) {
 			dataBaseFile << dataBasePaths[g];
 			dataBaseFile << "\n";
@@ -84,10 +84,19 @@ public:
 	int getFileCount() {
 		return dataBasePaths.size();
 	}
-	void removeFileFromDatabase(std::string path) {
-		std::remove(dataBasePaths.begin(), dataBasePaths.end(), path);
-		std::remove(formatString(path).c_str());
+	int removeFileFromDatabase(std::string path) {
+		int find = 0;
+		for (int j = 0; j < dataBasePaths.size(); j++) {
+			if (dataBasePaths[j] == path) {
+				find = j;
+			}
+		}
+		std::vector<std::string>::iterator place;
+		place = dataBasePaths.begin() + find;
+		dataBasePaths.erase(place);
+		int x = std::remove(formatString(path).c_str());
 		updateDataBase();
+		return x;
 	}
 	std::vector<std::string> openFileFromDatabase(std::string path) {
 
