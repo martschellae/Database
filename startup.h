@@ -9,6 +9,7 @@
 
 #include "configurations.h"
 #include "data.h"
+#include "error.h"
 
 int check(std::string username, std::string password) {
 

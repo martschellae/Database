@@ -14,12 +14,16 @@
 #include "networking.h"
 #include "images.h"
 
+extern const std::string error_message_database_corrupted = "Database cannot be read. Check if all data is saved as \".xyz\" files.\nAlso check the \"path.database\" file.\nThis file can be found in the \"assets/\" folder.";
+extern const std::string error_message_files_missing = "Specific file is missing, check all textures, fonts and template.\nIf this doesnt work, try reinstalling.";
+extern const std::string error_message_bad_config_format = "Bad Format:\nConfig file was modified into a wrong format. \nLook at the \"original_colors\" file for format help.\nMake sure there are no random whitespaces or newlines.";
+
 extern enum errorType {
 	error_database_corrupted = 1,
 	error_files_missing = 2,
 	error_bad_config_format = 3
 };
-void throwError(errorType eT) {
+void throwError(errorType eT) {//TODO
 
 	sf::Font font;
 
