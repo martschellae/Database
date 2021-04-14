@@ -129,12 +129,11 @@ std::string login() {
                             passInput.setString(p);
                         }
                     }
-                    else if (event.key.code == 13 && username != "\0") {
+                    else if (event.key.code == 13) {
                         if (check(username, password) == 1) {
                             return password;
                         }
                         exit(-1);
-                        
                     }
                     else {
                         password += event.text.unicode;
