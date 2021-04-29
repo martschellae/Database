@@ -97,7 +97,7 @@ void openFileBrowser(std::string password) {
 
 Reload:
 
-    sf::Text files("files: " + std::to_string(datab.getFileCount()) + "\nJa, hier ist leere,\nstill w.i.p.", font, 25);
+    sf::Text files("files: " + std::to_string(datab.getFileCount()) + "\nJa, hier ist leer", font, 25);
     files.setPosition(5, 15);
     files.setFillColor(visualYellow);
     files.setStyle(sf::Text::Bold);

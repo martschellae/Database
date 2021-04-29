@@ -12,20 +12,12 @@
 
 char caesar(char x, int y) {
 	if (y < 0) {
-		y = 94 + y;
+		y = 95 + y;
 	}
 	x -= 32;
-	x = (x + y) % 94;
+	x = (x + y) % 95;
 	x += 32;
 	return x;
-}
-UINT8 caesar(int x, int y) {
-	if (y < 0) {
-		y = 256 + y;
-	}
-	x = (x + y) % 256;
-
-	return static_cast<UINT8>(x);
 }
 
 std::string caesar(std::string x, int y) {
@@ -36,28 +28,31 @@ std::string caesar(std::string x, int y) {
 }
 
 std::string vignere(std::string text, bool way, std::string key) {
+
 	std::string keyword = key;
+	std::string newString = "\0";
+
 	if (way) {
 		while (keyword.size() < text.size()) {
 			keyword += keyword;
 		}
-		std::string neu = "\0";
+
 		for (int x = 0; x < text.size(); x++) {
 			int c = keyword[x] - 32;
-			neu += caesar(text[x], c);
+			newString += caesar(text[x], c);
 		}
-		return neu;
+		return newString;
 	}
 	else {
-	while (keyword.size() < text.size()) {
-		keyword += keyword;
-	}
-	std::string neu = "\0";
-	for (int x = 0; x < text.size(); x++) {
-		int c = keyword[x] - 32;
-		neu += caesar(text[x], -c);
-	}
-	return neu;
+		while (keyword.size() < text.size()) {
+			keyword += keyword;
+		}
+
+		for (int x = 0; x < text.size(); x++) {
+			int c = keyword[x] - 32;
+			newString += caesar(text[x], -c);
+		}
+		return newString;
 	}
 }
 
@@ -79,7 +74,7 @@ std::string createRandomKey(std::string base, unsigned int length = 128) {
 
 	while (key.size() < length) {
 		int c = rand();
-		char u = (rand() % 94) + 32;
+		char u = (rand() % 95) + 32;
 		key += u;
 	}
 	return key;
